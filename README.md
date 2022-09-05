@@ -7,3 +7,6 @@ Supports Android 4.1 (Jelly Bean) and up.
 By WLM Fonts (Wolf Lambert)
 
 https://www.fontsc.com/font/lets-go-digital
+
+# Licence
+GPLv3

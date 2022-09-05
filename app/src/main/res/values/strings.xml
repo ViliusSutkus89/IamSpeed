@@ -19,7 +19,9 @@
 
     <string name="about">
         Speedster v%s<br />\n
-        https://www.ViliusSutkus89.com/projects/Speedster<br />\n
+        https://www.ViliusSutkus89.com/projects/Speedster<br />\n<br />\n
+
+        Speedster is distributed under GPLv3 license
     </string>
     <string name="show_licenses">Show licences</string>
     <string name="stop">Stop</string>
