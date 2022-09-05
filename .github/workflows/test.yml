@@ -1,0 +1,72 @@
+# test.yml
+#
+# Copyright (C) 2022 ViliusSutkus89.com
+#
+# Speedster is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+name: test
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/test.yml'
+
+permissions:
+  actions: none
+  checks: none
+  contents: none
+  deployments: none
+  issues: none
+  packages: none
+  pull-requests: none
+  repository-projects: none
+  security-events: none
+  statuses: none
+
+env:
+  applicationId: com.viliussutkus89.speedster
+
+jobs:
+  testBuild:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Generate ephemeral keystore
+        run: keytool -genkey -noprompt -alias alias1 -dname "CN=$applicationId.ephemeral, OU=EphemeralSignatures, O=ViliusSutkus89.com, L=Kaunas, S=Kaunas, C=LT" -keystore app/$applicationId.ephemeral.jks -keypass 123456 -keyalg RSA -keysize 4096 -validity 1 -storepass 123456
+
+      - run: ./gradlew build lintRelease -Ptest_build
+        env:
+          SIGNING_KEYFILE: ${{env.applicationId}}.ephemeral.jks
+          SIGNING_PASS: 123456
+          SIGNING_ALIAS: alias1
+
+      - name: artifact release builds
+        uses: actions/upload-artifact@v3
+        with:
+          name: APKs
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Artifact lint report
+        uses: actions/upload-artifact@v3
+        with:
+          path: app/build/reports/lint-results-release.html
+          name: lintResults
+          if-no-files-found: error
