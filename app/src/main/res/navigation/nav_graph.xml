@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.viliussutkus89.speedster.ui.SpeedsterFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_speedster">
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
+
+    <include app:graph="@navigation/aboutlibs_navigation" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.viliussutkus89.speedster.ui.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about">
+        <action
+            android:id="@+id/action_aboutFragment_to_about_libs"
+            app:destination="@+id/about_libraries" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.viliussutkus89.speedster.ui.SettingsFragment"
+        android:label="@string/menu_settings" />
+
+</navigation>

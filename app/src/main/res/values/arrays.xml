@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <array name="speed_unit_labels">
+        <item>km/h</item>
+        <item>m/s</item>
+        <item>mph</item>
+    </array>
+    <array name="speed_unit_values">
+        <item>kmh</item>
+        <item>ms</item>
+        <item>mph</item>
+    </array>
+
+    <array name="day_night_labels">
+        <item>Auto</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </array>
+    <array name="day_night_values">
+        <item>auto</item>
+        <item>light</item>
+        <item>dark</item>
+    </array>
+
+    <array name="gps_update_interval_values">
+        <item>100ms</item>
+        <item>300ms</item>
+        <item>500ms</item>
+    </array>
+</resources>

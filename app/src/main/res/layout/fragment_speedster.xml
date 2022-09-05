@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.SpeedsterFragment">
+    <data>
+        <import type="android.view.View" />
+        <variable name="viewModel" type="com.viliussutkus89.speedster.MainViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/requests"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/request_location_permission"
+            android:text="@string/grant_location_permission"
+            android:visibility="@{viewModel.showLocationPermissionRequest ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/request_fine_location_permission"
+            android:text="@string/grant_fine_location_permission"
+            android:visibility="@{viewModel.showFineLocationPermissionRequest ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_enable_location"
+            android:text="@string/enable_location"
+            android:visibility="@{viewModel.showEnableLocationRequest ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_enable_gps"
+            android:text="@string/enable_gps"
+            android:visibility="@{viewModel.showEnableGpsLocationRequest ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_start"
+            android:visibility="@{viewModel.speedsterCanBeStarted ? View.VISIBLE : View.GONE }"
+            android:text="@string/start_speedster"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+
+            tools:text="299"
+            app:autoSizeTextType="uniform"
+            android:fontFamily="@font/lets_go_digital_regular"
+            android:visibility="@{viewModel.speedsterStarted ? View.VISIBLE : View.GONE }"
+            />
+
+    </LinearLayout>
+
+</layout>
