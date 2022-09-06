@@ -23,30 +23,36 @@ class SpeedListenerService: Service() {
     data class SpeedEntry(
         val speedInt: Int,
         val speedStr: String,
+        val accuracy: String?
     )
 
-    private fun createSpeedEntry(speed: Float): SpeedEntry {
+    private fun createSpeedEntry(speed: Float, accuracyMetersPerSecond: Float?): SpeedEntry {
         val speedInt: Int
         val speedStr: String
+        val accuracy: String?
 
         when (speedUnit) {
             SpeedUnitType.MS -> {
                 speedInt = speed.toInt()
                 speedStr = "$speedInt m/s"
+                accuracy = accuracyMetersPerSecond?.toString()
             }
             SpeedUnitType.KMH -> {
                 speedInt = (speed * 3.6f).toInt()
                 speedStr = "$speedInt km/h"
+                accuracy = accuracyMetersPerSecond?.let { (it * 3.6f).toString() }
             }
             SpeedUnitType.MPH -> {
                 speedInt = (speed * 2.2369f).toInt()
                 speedStr = "$speedInt mph"
+                accuracy = accuracyMetersPerSecond?.let { (it * 2.2369f).toString() }
             }
         }
 
         return SpeedEntry(
             speedInt = speedInt,
-            speedStr = speedStr
+            speedStr = speedStr,
+            accuracy = accuracy
         )
     }
 
@@ -288,7 +294,13 @@ class SpeedListenerService: Service() {
 
     private val locationChangeListener = LocationListenerCompat { location ->
         if (location.hasSpeed() && started_.value == true) {
-            createSpeedEntry(location.speed).let { speedEntry ->
+            val accuracy = if (LocationCompat.hasSpeedAccuracy(location)) {
+                LocationCompat.getSpeedAccuracyMetersPerSecond(location)
+            } else {
+                null
+            }
+
+            createSpeedEntry(location.speed, accuracy).let { speedEntry ->
                 speed_.postValue(speedEntry)
                 NotificationManagerCompat.from(this)
                     .notify(notificationId, getNotification(speedEntry))

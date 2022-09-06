@@ -87,11 +87,24 @@ class SpeedsterFragment: Fragment() {
         }
 
         viewModel.speed.observe(viewLifecycleOwner) { speed ->
-            binding.speed.clearAnimation()
-            binding.speed.text = speed?.let {
-                binding.speed.startAnimation(getNewAnimationObj())
-                it.speedInt.toString()
-            } ?: "???"
+            binding.speed.let { speedBinding ->
+                speedBinding.clearAnimation()
+                speedBinding.text = speed?.let {
+                    speedBinding.startAnimation(getNewAnimationObj())
+                    it.speedInt.toString()
+                } ?: "???"
+            }
+
+            binding.accuracy.let { accuracyBinding ->
+                speed?.accuracy?.let { accuracy ->
+                    accuracyBinding.visibility = View.VISIBLE
+                    accuracyBinding.text = getString(R.string.accuracy, accuracy)
+                } ?: let {
+                    accuracyBinding.visibility = View.GONE
+                    accuracyBinding.text = ""
+                }
+            }
+        }
         }
     }
 

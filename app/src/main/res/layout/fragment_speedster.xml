@@ -62,6 +62,12 @@
             android:visibility="@{viewModel.speedsterStarted ? View.VISIBLE : View.GONE }" />
 
         <TextView
+            android:id="@+id/accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.speedsterStarted ? View.VISIBLE : View.GONE }" />
+
+        <TextView
             android:id="@+id/speed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
