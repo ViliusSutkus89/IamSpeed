@@ -16,8 +16,9 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         private const val TAG = "MainViewModel"
     }
 
-    val speed: LiveData<SpeedListenerService.SpeedEntry?> get() = SpeedListenerService.speed
     val speedsterStarted: LiveData<Boolean> get() = SpeedListenerService.started
+    val speed: LiveData<SpeedListenerService.SpeedEntry?> get() = SpeedListenerService.speed
+    val satelliteCount: LiveData<Int> get() = SpeedListenerService.satelliteCount
 
     private val app: Application get() = getApplication<Application>()
 

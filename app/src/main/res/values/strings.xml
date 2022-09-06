@@ -30,4 +30,5 @@
     <string name="start_speedster">Start speedster</string>
     <string name="waiting_for_signal">Waiting for signal</string>
     <string name="menu_stop">Stop</string>
+    <string name="satellite_count">Satellites: %d</string>
 </resources>

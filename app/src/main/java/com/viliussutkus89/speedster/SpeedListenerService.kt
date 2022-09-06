@@ -5,15 +5,14 @@ import android.content.*
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.LocationManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.location.LocationListenerCompat
-import androidx.core.location.LocationManagerCompat
-import androidx.core.location.LocationRequestCompat
+import androidx.core.location.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
@@ -56,11 +55,14 @@ class SpeedListenerService: Service() {
 
         private const val notificationId = 1
 
+        private val started_ = MutableLiveData(false)
+        val started: LiveData<Boolean> get() = started_
+
         private val speed_ = MutableLiveData<SpeedEntry?>(null)
         val speed: LiveData<SpeedEntry?> get() = speed_
 
-        private val started_ = MutableLiveData(false)
-        val started: LiveData<Boolean> get() = started_
+        private val satelliteCount_ = MutableLiveData(0)
+        val satelliteCount: LiveData<Int> = satelliteCount_
 
         private const val START_INTENT_ACTION = "START"
         fun startSpeedListener(context: Context) {
@@ -210,9 +212,31 @@ class SpeedListenerService: Service() {
             startForeground(notificationId, initialNotification)
         }
 
-        requestLocationUpdates(getSystemService(LOCATION_SERVICE) as LocationManager)
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        requestLocationUpdates(locationManager)
         stopBroadcastReceiver.register()
+        try {
+            LocationManagerCompat.registerGnssStatusCallback(locationManager, gnssStatusCallback, Handler(Looper.myLooper()!!))
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
         started_.postValue(true)
+    }
+
+    private val gnssStatusCallback = object: GnssStatusCompat.Callback() {
+        override fun onSatelliteStatusChanged(status: GnssStatusCompat) {
+            /*
+            https://developer.android.com/reference/androidx/core/location/GnssStatusCompat
+            Note: When used to wrap GpsStatus, the best performance can be obtained by using a monotonically increasing satelliteIndex parameter (for instance, by using a loop from 0 to getSatelliteCount). Random access is supported but performance may suffer.
+             */
+            var active = 0
+            for (i in 0 until status.satelliteCount) {
+                if (status.usedInFix(i)) {
+                    active++
+                }
+            }
+            satelliteCount_.postValue(active)
+        }
     }
 
     private fun stop() {
@@ -226,11 +250,13 @@ class SpeedListenerService: Service() {
         try {
             val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             LocationManagerCompat.removeUpdates(locationManager, locationChangeListener)
+            LocationManagerCompat.unregisterGnssStatusCallback(locationManager, gnssStatusCallback)
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
 
         started_.postValue(false)
+        satelliteCount_.postValue(0)
         speed_.postValue(null)
         NotificationManagerCompat.from(this).cancel(notificationId)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
