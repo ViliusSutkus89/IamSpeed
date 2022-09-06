@@ -1,2 +1,0 @@
-- Show accuracy and satellite count
-- Make the speed number bigger
