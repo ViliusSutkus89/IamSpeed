@@ -75,6 +75,8 @@
 
             tools:text="299"
             app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="600dp"
+            android:lines="1"
             android:fontFamily="@font/lets_go_digital_regular"
             android:visibility="@{viewModel.speedsterStarted ? View.VISIBLE : View.GONE }"
             />
