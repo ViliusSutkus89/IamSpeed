@@ -105,7 +105,6 @@ class SpeedsterFragment: Fragment() {
                 }
             }
         }
-        }
     }
 
     private var speedFadeoutAnimation: Animation? = null
