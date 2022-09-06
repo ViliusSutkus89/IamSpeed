@@ -22,7 +22,6 @@ import com.viliussutkus89.speedster.ui.SettingsFragment
 
 class SpeedListenerService: Service() {
     data class SpeedEntry(
-        val timestamp: Long,
         val speedInt: Int,
         val speedStr: String,
     )
@@ -47,7 +46,6 @@ class SpeedListenerService: Service() {
         }
 
         return SpeedEntry(
-            timestamp = System.currentTimeMillis(),
             speedInt = speedInt,
             speedStr = speedStr
         )
