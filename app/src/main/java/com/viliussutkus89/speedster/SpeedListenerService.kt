@@ -17,6 +17,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.viliussutkus89.speedster.ui.SettingsFragment
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 class SpeedListenerService: Service() {
@@ -164,6 +166,8 @@ class SpeedListenerService: Service() {
 
     private val sharedPreferences: SharedPreferences? get() = PreferenceManager.getDefaultSharedPreferences(this)
 
+    private val executor: Executor = Executors.newSingleThreadExecutor()
+
     private fun requestLocationUpdates(locationManager: LocationManager) {
         val intervalStr = sharedPreferences?.getString(SettingsFragment.gpsUpdateInterval, null)
         val interval = (intervalStr?.removeSuffix("ms") ?: "300").toLong()
@@ -177,8 +181,8 @@ class SpeedListenerService: Service() {
                 locationManager,
                 LocationManager.GPS_PROVIDER,
                 locationRequest,
+                executor,
                 locationChangeListener,
-                Looper.myLooper()!!
             )
         } catch (e: SecurityException) {
             e.printStackTrace()
@@ -222,7 +226,7 @@ class SpeedListenerService: Service() {
         requestLocationUpdates(locationManager)
         stopBroadcastReceiver.register()
         try {
-            LocationManagerCompat.registerGnssStatusCallback(locationManager, gnssStatusCallback, Handler(Looper.myLooper()!!))
+            LocationManagerCompat.registerGnssStatusCallback(locationManager, executor, gnssStatusCallback)
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
