@@ -184,6 +184,15 @@ class SpeedListenerService: Service() {
                 executor,
                 locationChangeListener,
             )
+
+            LocationManagerCompat.getCurrentLocation(
+                locationManager,
+                LocationManager.GPS_PROVIDER,
+                null,
+                executor
+            ) {
+                locationChangeListener.onLocationChanged(it)
+            }
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
