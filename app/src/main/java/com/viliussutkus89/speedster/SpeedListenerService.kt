@@ -3,11 +3,10 @@ package com.viliussutkus89.speedster
 import android.app.*
 import android.content.*
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -190,8 +189,10 @@ class SpeedListenerService: Service() {
                 LocationManager.GPS_PROVIDER,
                 null,
                 executor
-            ) {
-                locationChangeListener.onLocationChanged(it)
+            ) { it: Location? ->
+                it?.let {
+                    locationChangeListener.onLocationChanged(it)
+                }
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
