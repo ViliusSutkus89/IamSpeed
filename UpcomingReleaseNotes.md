@@ -1,1 +1,0 @@
-Obtain GPS fix faster
