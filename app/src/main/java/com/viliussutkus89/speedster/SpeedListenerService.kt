@@ -96,14 +96,24 @@ class SpeedListenerService: Service() {
 
     private val stopBroadcastReceiver = object: BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent?) {
-            if (intent?.action == STOP_BROADCAST_ACTION) {
-                stop()
+            when (intent?.action) {
+                STOP_BROADCAST_ACTION -> stop()
+
+                LocationManager.PROVIDERS_CHANGED_ACTION, LocationManager.MODE_CHANGED_ACTION -> {
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        stop()
+                    }
+                }
             }
         }
 
         fun register() {
             this@SpeedListenerService.registerReceiver(this, IntentFilter().also {
                 it.addAction(STOP_BROADCAST_ACTION)
+                it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    it.addAction(LocationManager.MODE_CHANGED_ACTION)
+                }
             })
         }
 
@@ -163,11 +173,12 @@ class SpeedListenerService: Service() {
         }
     }
 
+    private val locationManager: LocationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     private val sharedPreferences: SharedPreferences? get() = PreferenceManager.getDefaultSharedPreferences(this)
 
     private val executor: Executor = Executors.newSingleThreadExecutor()
 
-    private fun requestLocationUpdates(locationManager: LocationManager) {
+    private fun requestLocationUpdates() {
         val intervalStr = sharedPreferences?.getString(SettingsFragment.gpsUpdateInterval, null)
         val interval = (intervalStr?.removeSuffix("ms") ?: "300").toLong()
 
@@ -232,8 +243,7 @@ class SpeedListenerService: Service() {
             startForeground(notificationId, initialNotification)
         }
 
-        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        requestLocationUpdates(locationManager)
+        requestLocationUpdates()
         stopBroadcastReceiver.register()
         try {
             LocationManagerCompat.registerGnssStatusCallback(locationManager, executor, gnssStatusCallback)
@@ -293,10 +303,9 @@ class SpeedListenerService: Service() {
                 when (key) {
                     SettingsFragment.speedUnit -> getSpeedUnit(sp)
                     SettingsFragment.gpsUpdateInterval -> {
-                        val locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
                         try {
                             LocationManagerCompat.removeUpdates(locationManager, locationChangeListener)
-                            requestLocationUpdates(locationManager)
+                            requestLocationUpdates()
                         } catch (e: SecurityException) {
                             e.printStackTrace()
                         }

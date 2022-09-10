@@ -68,9 +68,6 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
             val isGpsProviderEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
             _showEnableLocationRequest.value = !isLocationAvailable
             _showEnableGpsLocationRequest.value = isLocationAvailable && !isGpsProviderEnabled
-            if (!isGpsProviderEnabled) {
-                stopSpeedster()
-            }
         } ?: run {
             Log.e(TAG, "Failed to obtain LocationManager")
         }
