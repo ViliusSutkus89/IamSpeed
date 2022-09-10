@@ -91,7 +91,7 @@ class SpeedListenerService: Service() {
             context.startService(intent)
         }
 
-        const val STOP_BROADCAST_ACTION = "com.viliussutkus89.speedster.STOP_BROADCAST"
+        private const val STOP_BROADCAST_ACTION = "com.viliussutkus89.speedster.STOP_BROADCAST"
     }
 
     private val stopBroadcastReceiver = object: BroadcastReceiver() {
