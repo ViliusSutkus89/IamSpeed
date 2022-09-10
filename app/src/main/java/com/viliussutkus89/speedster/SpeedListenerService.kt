@@ -212,7 +212,7 @@ class SpeedListenerService: Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun start() {
-        if (started_.value == true) {
+        if (started.value == true) {
             Log.e(TAG, "Double start event detected!")
             return
         }
@@ -260,8 +260,7 @@ class SpeedListenerService: Service() {
     }
 
     private fun stop() {
-        if (started_.value != true) {
-            Log.e(TAG, "Double stop event detected!")
+        if (started.value != true) {
             return
         }
 
@@ -275,9 +274,9 @@ class SpeedListenerService: Service() {
             e.printStackTrace()
         }
 
-        started_.postValue(false)
-        satelliteCount_.postValue(0)
-        speed_.postValue(null)
+        started_.value = false
+        satelliteCount_.value = 0
+        speed_.value = null
         NotificationManagerCompat.from(this).cancel(notificationId)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             stopForeground(STOP_FOREGROUND_REMOVE)
@@ -307,7 +306,7 @@ class SpeedListenerService: Service() {
         }
 
     private val locationChangeListener = LocationListenerCompat { location ->
-        if (location.hasSpeed() && started_.value == true) {
+        if (location.hasSpeed() && started.value == true) {
             val accuracy = if (LocationCompat.hasSpeedAccuracy(location)) {
                 LocationCompat.getSpeedAccuracyMetersPerSecond(location)
             } else {
