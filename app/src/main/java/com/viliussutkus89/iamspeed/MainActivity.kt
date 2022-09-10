@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster
+package com.viliussutkus89.iamspeed
 
 import android.content.BroadcastReceiver
 import android.content.Context

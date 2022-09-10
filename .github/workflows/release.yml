@@ -1,8 +1,9 @@
 # release.yml
 #
-# Copyright (C) 2022 ViliusSutkus89.com
+# Copyright (C) 2022 ViliusSutkus89.com/i-am-speed
+
 #
-# Speedster is free software: you can redistribute it and/or modify
+# I am Speed is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3,
 # as published by the Free Software Foundation.
 #
@@ -30,7 +31,7 @@ permissions:
   statuses: none
 
 env:
-  applicationId: com.viliussutkus89.speedster
+  applicationId: com.viliussutkus89.iamspeed
 
 jobs:
   release:

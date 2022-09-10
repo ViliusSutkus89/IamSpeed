@@ -1,13 +1,13 @@
-package com.viliussutkus89.speedster
+package com.viliussutkus89.iamspeed
 
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import androidx.preference.PreferenceManager
-import com.viliussutkus89.speedster.ui.SettingsFragment
+import com.viliussutkus89.iamspeed.ui.SettingsFragment
 
 
-class SpeedsterApplication: MultiDexApplication() {
+class IamSpeedApplication: MultiDexApplication() {
     private val sharedPreferences: SharedPreferences? get() = PreferenceManager.getDefaultSharedPreferences(this)
 
     override fun onCreate() {

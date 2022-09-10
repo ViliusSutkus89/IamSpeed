@@ -1,10 +1,10 @@
-package com.viliussutkus89.speedster.ui
+package com.viliussutkus89.iamspeed.ui
 
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import com.viliussutkus89.speedster.R
+import com.viliussutkus89.iamspeed.R
 
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {

@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster.ui
+package com.viliussutkus89.iamspeed.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.viliussutkus89.speedster.BuildConfig
-import com.viliussutkus89.speedster.R
-import com.viliussutkus89.speedster.databinding.FragmentAboutBinding
+import com.viliussutkus89.iamspeed.BuildConfig
+import com.viliussutkus89.iamspeed.R
+import com.viliussutkus89.iamspeed.databinding.FragmentAboutBinding
 
 
 class AboutFragment: Fragment(R.layout.fragment_about) {

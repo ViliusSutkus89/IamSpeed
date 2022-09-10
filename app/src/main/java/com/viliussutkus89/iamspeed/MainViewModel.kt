@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster
+package com.viliussutkus89.iamspeed
 
 import android.Manifest
 import android.app.Application
@@ -16,7 +16,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         private const val TAG = "MainViewModel"
     }
 
-    val speedsterStarted: LiveData<Boolean> get() = SpeedListenerService.started
+    val started: LiveData<Boolean> get() = SpeedListenerService.started
     val speed: LiveData<SpeedListenerService.SpeedEntry?> get() = SpeedListenerService.speed
     val satelliteCount: LiveData<Int> get() = SpeedListenerService.satelliteCount
 
@@ -51,7 +51,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
             else -> {
                 _showLocationPermissionRequest.value = true
                 _showFineLocationPermissionRequest.value = false
-                stopSpeedster()
+                stop()
             }
         }
     }
@@ -73,7 +73,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         }
     }
 
-    val speedsterCanBeStartedOnStartup = MergerLiveData.Three(
+    val serviceCanBeStartedOnStartup = MergerLiveData.Three(
         _showLocationPermissionRequest,
         _showEnableLocationRequest,
         _showEnableGpsLocationRequest,
@@ -85,11 +85,11 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         !(noLocationPermission || locationDisabled || noGps)
     }
 
-    val speedsterCanBeStarted = MergerLiveData.Four(
+    val serviceCanBeStarted = MergerLiveData.Four(
         _showLocationPermissionRequest,
         _showEnableLocationRequest,
         _showEnableGpsLocationRequest,
-        speedsterStarted
+        started
     ) {
         noLocationPermission,
         locationDisabled,
@@ -99,11 +99,11 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         !(noLocationPermission || locationDisabled || noGps || alreadyStarted)
     }
 
-    fun startSpeedster() {
+    fun start() {
         SpeedListenerService.startSpeedListener(app)
     }
 
-    fun stopSpeedster() {
+    fun stop() {
         SpeedListenerService.stopSpeedListener(app)
     }
 }

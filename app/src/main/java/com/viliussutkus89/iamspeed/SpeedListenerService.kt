@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster
+package com.viliussutkus89.iamspeed
 
 import android.app.*
 import android.content.*
@@ -15,7 +15,7 @@ import androidx.core.location.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import com.viliussutkus89.speedster.ui.SettingsFragment
+import com.viliussutkus89.iamspeed.ui.SettingsFragment
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -91,7 +91,7 @@ class SpeedListenerService: Service() {
             context.startService(intent)
         }
 
-        private const val STOP_BROADCAST_ACTION = "com.viliussutkus89.speedster.STOP_BROADCAST"
+        private const val STOP_BROADCAST_ACTION = "com.viliussutkus89.iamspeed.STOP_BROADCAST"
     }
 
     private val stopBroadcastReceiver = object: BroadcastReceiver() {
@@ -110,6 +110,7 @@ class SpeedListenerService: Service() {
         fun register() {
             this@SpeedListenerService.registerReceiver(this, IntentFilter().also {
                 it.addAction(STOP_BROADCAST_ACTION)
+
                 it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     it.addAction(LocationManager.MODE_CHANGED_ACTION)
@@ -124,15 +125,15 @@ class SpeedListenerService: Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(id: String) {
-        val name: CharSequence = getString(R.string.speedster_notification_channel_name)
-        val description = getString(R.string.speedster_notification_channel_description)
+        val name: CharSequence = getString(R.string.notification_channel_name)
+        val description = getString(R.string.notification_channel_description)
         val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW)
         channel.description = description
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
     private val notificationBuilder: NotificationCompat.Builder by lazy {
-        val channelId = getString(R.string.speedster_notification_channel_id)
+        val channelId = getString(R.string.notification_channel_id)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(channelId)
         }
@@ -147,7 +148,7 @@ class SpeedListenerService: Service() {
         }
         val stopPendingIntent = PendingIntent.getBroadcast(this, 0, stopIntent, mutabilityFlag)
         NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.notification_icon_speedster)
+            .setSmallIcon(R.drawable.notification_icon_iamspeed)
             .setContentIntent(tapActionPendingIntent)
             .addAction(R.drawable.notification_icon_off, getString(R.string.stop), stopPendingIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

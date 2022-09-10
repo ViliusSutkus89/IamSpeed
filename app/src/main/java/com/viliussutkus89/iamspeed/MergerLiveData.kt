@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster
+package com.viliussutkus89.iamspeed
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData

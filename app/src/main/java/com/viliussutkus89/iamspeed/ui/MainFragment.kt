@@ -1,4 +1,4 @@
-package com.viliussutkus89.speedster.ui
+package com.viliussutkus89.iamspeed.ui
 
 import android.Manifest
 import android.content.Intent
@@ -15,13 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.viliussutkus89.speedster.MainViewModel
-import com.viliussutkus89.speedster.R
-import com.viliussutkus89.speedster.databinding.FragmentSpeedsterBinding
+import com.viliussutkus89.iamspeed.MainViewModel
+import com.viliussutkus89.iamspeed.R
+import com.viliussutkus89.iamspeed.databinding.FragmentMainBinding
 
 
-class SpeedsterFragment: Fragment() {
-    private var _binding: FragmentSpeedsterBinding? = null
+class MainFragment: Fragment() {
+    private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by activityViewModels {
@@ -39,7 +39,7 @@ class SpeedsterFragment: Fragment() {
     ): View {
         viewModel.checkPermissions()
         viewModel.checkLocationEnabled()
-        _binding = FragmentSpeedsterBinding.inflate(inflater, container, false).also {
+        _binding = FragmentMainBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
         }
@@ -77,12 +77,12 @@ class SpeedsterFragment: Fragment() {
         binding.buttonEnableGps.setOnClickListener(openSettings)
 
         binding.buttonStart.setOnClickListener {
-            viewModel.startSpeedster()
+            viewModel.start()
         }
 
-        viewModel.speedsterCanBeStartedOnStartup.observe(viewLifecycleOwner) {
+        viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.startSpeedster()
+                viewModel.start()
             }
         }
 
@@ -138,7 +138,7 @@ class SpeedsterFragment: Fragment() {
                 }
             }
 
-            viewModel.speedsterStarted.observe(viewLifecycleOwner) {
+            viewModel.started.observe(viewLifecycleOwner) {
                 menu.findItem(R.id.stop)?.isVisible = it
             }
         }
@@ -146,15 +146,15 @@ class SpeedsterFragment: Fragment() {
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
                 R.id.stop -> {
-                    viewModel.stopSpeedster()
+                    viewModel.stop()
                     true
                 }
                 R.id.settings -> {
-                    findNavController().navigate(SpeedsterFragmentDirections.actionMainFragmentToSettingsFragment())
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingsFragment())
                     true
                 }
                 R.id.about -> {
-                    findNavController().navigate(SpeedsterFragmentDirections.actionMainFragmentToAboutFragment())
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToAboutFragment())
                     true
                 }
                 else -> false

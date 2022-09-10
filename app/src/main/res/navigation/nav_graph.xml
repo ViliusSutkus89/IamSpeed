@@ -8,9 +8,9 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.viliussutkus89.speedster.ui.SpeedsterFragment"
+        android:name="com.viliussutkus89.iamspeed.ui.MainFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_speedster">
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
@@ -22,7 +22,7 @@
     <include app:graph="@navigation/aboutlibs_navigation" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.viliussutkus89.speedster.ui.AboutFragment"
+        android:name="com.viliussutkus89.iamspeed.ui.AboutFragment"
         android:label="@string/menu_about"
         tools:layout="@layout/fragment_about">
         <action
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.viliussutkus89.speedster.ui.SettingsFragment"
+        android:name="com.viliussutkus89.iamspeed.ui.SettingsFragment"
         android:label="@string/menu_settings" />
 
 </navigation>
