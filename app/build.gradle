@@ -34,7 +34,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug.versionNameSuffix = ".debug"
+        debug {
+            versionNameSuffix = ".debug"
+            applicationIdSuffix = ".debug"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
