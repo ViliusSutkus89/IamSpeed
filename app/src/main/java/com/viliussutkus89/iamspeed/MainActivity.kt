@@ -25,6 +25,13 @@ class MainActivity: AppCompatActivity(R.layout.activity_main) {
             .navController
 
     private val locationManagerBroadcastReceiver = object: BroadcastReceiver() {
+        val intentFilter = IntentFilter().also {
+            it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                it.addAction(LocationManager.MODE_CHANGED_ACTION)
+            }
+        }
+
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 LocationManager.PROVIDERS_CHANGED_ACTION,
@@ -33,31 +40,17 @@ class MainActivity: AppCompatActivity(R.layout.activity_main) {
                 }
             }
         }
-
-        fun register() {
-            val intentFilter = IntentFilter().also {
-                it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    it.addAction(LocationManager.MODE_CHANGED_ACTION)
-                }
-            }
-            registerReceiver(this, intentFilter)
-        }
-
-        fun unregister() {
-            unregisterReceiver(this)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupActionBarWithNavController(navController)
-        locationManagerBroadcastReceiver.register()
+        registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        locationManagerBroadcastReceiver.unregister()
+        unregisterReceiver(locationManagerBroadcastReceiver)
     }
 
     override fun onSupportNavigateUp(): Boolean {
