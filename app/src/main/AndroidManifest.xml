@@ -28,7 +28,7 @@
         </activity>
 
         <service
-            android:name=".SpeedListenerService"
+            android:name=".service.SpeedListenerService"
             android:foregroundServiceType="location"
             android:exported="false" />
 

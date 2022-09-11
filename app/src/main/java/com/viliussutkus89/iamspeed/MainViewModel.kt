@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.*
+import com.viliussutkus89.iamspeed.service.SpeedEntry
+import com.viliussutkus89.iamspeed.service.SpeedListenerService
 
 
 class MainViewModel(app: Application): AndroidViewModel(app) {
@@ -17,7 +19,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     }
 
     val started: LiveData<Boolean> get() = SpeedListenerService.started
-    val speed: LiveData<SpeedListenerService.SpeedEntry?> get() = SpeedListenerService.speed
+    val speed: LiveData<SpeedEntry?> get() = SpeedListenerService.speed
     val satelliteCount: LiveData<Int> get() = SpeedListenerService.satelliteCount
 
     private val app: Application get() = getApplication<Application>()
