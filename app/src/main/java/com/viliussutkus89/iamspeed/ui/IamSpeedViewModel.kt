@@ -1,4 +1,4 @@
-package com.viliussutkus89.iamspeed
+package com.viliussutkus89.iamspeed.ui
 
 import android.Manifest
 import android.app.Application
@@ -9,11 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.*
+import com.viliussutkus89.iamspeed.MergerLiveData
 import com.viliussutkus89.iamspeed.service.SpeedEntry
 import com.viliussutkus89.iamspeed.service.SpeedListenerService
 
 
-class MainViewModel(app: Application): AndroidViewModel(app) {
+class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
     companion object {
         private const val TAG = "MainViewModel"
     }
@@ -26,9 +27,9 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
 
     class Factory(private val app: Application): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(IamSpeedViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(app) as T
+                return IamSpeedViewModel(app) as T
             }
             throw IllegalArgumentException("Unable to construct MainViewModel")
         }
@@ -79,8 +80,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         _showLocationPermissionRequest,
         _showEnableLocationRequest,
         _showEnableGpsLocationRequest,
-    ) {
-        noLocationPermission,
+    ) { noLocationPermission,
         locationDisabled,
         noGps ->
 
@@ -92,8 +92,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         _showEnableLocationRequest,
         _showEnableGpsLocationRequest,
         started
-    ) {
-        noLocationPermission,
+    ) { noLocationPermission,
         locationDisabled,
         noGps,
         alreadyStarted ->

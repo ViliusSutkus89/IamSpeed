@@ -4,18 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/IamSpeedFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.viliussutkus89.iamspeed.ui.MainFragment"
+        android:id="@+id/IamSpeedFragment"
+        android:name="com.viliussutkus89.iamspeed.ui.IamSpeedFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_iam_speed">
         <action
-            android:id="@+id/action_mainFragment_to_settingsFragment"
+            android:id="@+id/action_IamSpeedFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_aboutFragment"
+            android:id="@+id/action_IamSpeedFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
     </fragment>
 

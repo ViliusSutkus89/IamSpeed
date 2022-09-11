@@ -4,7 +4,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.LocationManager
 import android.os.Build
@@ -16,9 +19,8 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import com.viliussutkus89.iamspeed.MainActivity
 import com.viliussutkus89.iamspeed.R
-import java.util.concurrent.Executor
+import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
 import java.util.concurrent.Executors
 
 
@@ -104,7 +106,7 @@ class SpeedListenerService: LifecycleService() {
 
         val mutabilityFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
 
-        val tapActionIntent = Intent(this, MainActivity::class.java)
+        val tapActionIntent = Intent(this, IamSpeedActivity::class.java)
         val tapActionPendingIntent = PendingIntent.getActivity(this, 0, tapActionIntent, mutabilityFlag)
 
         val stopIntent = Intent().apply {

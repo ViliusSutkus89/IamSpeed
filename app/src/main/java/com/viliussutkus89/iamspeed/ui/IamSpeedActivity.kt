@@ -1,4 +1,4 @@
-package com.viliussutkus89.iamspeed
+package com.viliussutkus89.iamspeed.ui
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,12 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.viliussutkus89.iamspeed.R
 
 
-class MainActivity: AppCompatActivity(R.layout.activity_main) {
+class IamSpeedActivity: AppCompatActivity(R.layout.activity_iamspeed) {
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModel.Factory(application)
+    private val viewModel: IamSpeedViewModel by viewModels {
+        IamSpeedViewModel.Factory(application)
     }
 
     private val navController: NavController get() =

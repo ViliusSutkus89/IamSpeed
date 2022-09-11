@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IamSpeed">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.IamSpeedActivity"
             android:exported="true"
             android:launchMode="singleInstance">
             <intent-filter>

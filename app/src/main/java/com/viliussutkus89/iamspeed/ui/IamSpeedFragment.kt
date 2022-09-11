@@ -15,17 +15,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.viliussutkus89.iamspeed.MainViewModel
 import com.viliussutkus89.iamspeed.R
-import com.viliussutkus89.iamspeed.databinding.FragmentMainBinding
+import com.viliussutkus89.iamspeed.databinding.FragmentIamSpeedBinding
 
 
-class MainFragment: Fragment() {
-    private var _binding: FragmentMainBinding? = null
+class IamSpeedFragment: Fragment() {
+    private var _binding: FragmentIamSpeedBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels {
-        MainViewModel.Factory(requireActivity().application)
+    private val viewModel: IamSpeedViewModel by activityViewModels {
+        IamSpeedViewModel.Factory(requireActivity().application)
     }
 
     override fun onDestroy() {
@@ -39,7 +38,7 @@ class MainFragment: Fragment() {
     ): View {
         viewModel.checkPermissions()
         viewModel.checkLocationEnabled()
-        _binding = FragmentMainBinding.inflate(inflater, container, false).also {
+        _binding = FragmentIamSpeedBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
         }
@@ -150,11 +149,11 @@ class MainFragment: Fragment() {
                     true
                 }
                 R.id.settings -> {
-                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingsFragment())
+                    findNavController().navigate(IamSpeedFragmentDirections.actionIamSpeedFragmentToSettingsFragment())
                     true
                 }
                 R.id.about -> {
-                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToAboutFragment())
+                    findNavController().navigate(IamSpeedFragmentDirections.actionIamSpeedFragmentToAboutFragment())
                     true
                 }
                 else -> false

@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.MainFragment">
+    tools:context=".ui.IamSpeedFragment">
     <data>
         <import type="android.view.View" />
-        <variable name="viewModel" type="com.viliussutkus89.iamspeed.MainViewModel" />
+        <variable name="viewModel" type="com.viliussutkus89.iamspeed.ui.IamSpeedViewModel" />
     </data>
 
     <LinearLayout
