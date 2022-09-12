@@ -1,7 +1,11 @@
 package com.viliussutkus89.iamspeed.ui
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -36,14 +40,23 @@ class IamSpeedFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().let {
         viewModel.checkPermissions()
         viewModel.checkLocationEnabled()
+            it.addMenuProvider(menuProvider, viewLifecycleOwner)
+            it.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
+        }
         _binding = FragmentIamSpeedBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = viewModel
         }
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireContext().unregisterReceiver(locationManagerBroadcastReceiver)
+        _binding = null
     }
 
     private val locationPermissionRequest = registerForActivityResult(
@@ -103,6 +116,19 @@ class IamSpeedFragment: Fragment() {
                     accuracyBinding.text = ""
                 }
             }
+        }
+    }
+
+    private val locationManagerBroadcastReceiver = object: BroadcastReceiver() {
+        val intentFilter = IntentFilter().also {
+            it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                it.addAction(LocationManager.MODE_CHANGED_ACTION)
+            }
+        }
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            viewModel.checkLocationEnabled(requireContext())
         }
     }
 
