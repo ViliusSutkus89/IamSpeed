@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
@@ -20,6 +19,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.viliussutkus89.iamspeed.R
+import com.viliussutkus89.iamspeed.Settings.Companion.speedEntryStartFadingAfter
+import com.viliussutkus89.iamspeed.Settings.Companion.speedEntryTotalTimeout
 import com.viliussutkus89.iamspeed.databinding.FragmentIamSpeedBinding
 
 
@@ -95,7 +96,7 @@ class IamSpeedFragment: Fragment() {
             binding.speed.let { speedBinding ->
                 speedBinding.clearAnimation()
                 speedBinding.text = speed?.let {
-                    speedBinding.startAnimation(getNewAnimationObj())
+                    speedBinding.startAnimation(fadeoutAnimation)
                     it.speedInt.toString()
                 } ?: "???"
             }
@@ -125,25 +126,9 @@ class IamSpeedFragment: Fragment() {
         }
     }
 
-    private var speedFadeoutAnimation: Animation? = null
-    private fun getNewAnimationObj(): Animation {
-        speedFadeoutAnimation?.let {
-            it.setAnimationListener(null)
-            it.cancel()
-        }
-        val animation = AlphaAnimation(1.0f, 0.1f).also {
-            it.duration = 2000
-            it.startOffset = 500
-            it.setAnimationListener(object: Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) = Unit
-                override fun onAnimationRepeat(animation: Animation?) = Unit
-                override fun onAnimationEnd(animation: Animation?) {
-                    binding.speed.text = "???"
-                }
-            })
-        }
-        speedFadeoutAnimation = animation
-        return animation
+    private val fadeoutAnimation = AlphaAnimation(1.0f, 0.1f).also {
+        it.duration = speedEntryTotalTimeout - speedEntryStartFadingAfter
+        it.startOffset = speedEntryStartFadingAfter
     }
 
     private val menuProvider = object: MenuProvider {

@@ -132,7 +132,7 @@ class SpeedListenerService: LifecycleService() {
 
     // These are lazy loaded, because Context isn't ready yet
     private val locationManager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
-    private val executor by lazy { Executors.newSingleThreadExecutor() }
+    private val executor by lazy { Executors.newSingleThreadScheduledExecutor() }
     private val sharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
     private val speedListener by lazy { SpeedListener(locationManager, executor, sharedPreferences) }
     private val satelliteCountListener by lazy { SatelliteCountListener(locationManager, executor) }

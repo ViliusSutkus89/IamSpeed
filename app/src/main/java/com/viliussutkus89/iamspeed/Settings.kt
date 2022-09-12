@@ -8,15 +8,18 @@ class Settings {
         const val speedUnit = "speedUnit"
         const val gpsUpdateInterval = "gpsUpdateInterval"
 
-        private val defaults = mapOf(
+        private val stringDefaults = mapOf(
             Pair(lightDark, "dark"),
             Pair(speedUnit, "kmh"),
             Pair(gpsUpdateInterval, "300ms")
         )
 
         fun get(sharedPreferences: SharedPreferences?, key: String): String {
-            val default = defaults[key] ?: ""
+            val default = stringDefaults[key] ?: ""
             return sharedPreferences?.getString(key, default) ?: default
         }
+
+        const val speedEntryStartFadingAfter = 500L
+        const val speedEntryTotalTimeout = 2500L
     }
 }

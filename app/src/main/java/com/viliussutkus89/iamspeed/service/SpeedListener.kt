@@ -10,13 +10,14 @@ import androidx.core.location.LocationRequestCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.viliussutkus89.iamspeed.Settings
-import com.viliussutkus89.iamspeed.ui.SettingsFragment
-import java.util.concurrent.Executor
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 
 internal class SpeedListener(
     private val locationManager: LocationManager,
-    private val executor: Executor,
+    private val executor: ScheduledExecutorService,
     private val sharedPreferences: SharedPreferences
 ) {
 
@@ -26,6 +27,11 @@ internal class SpeedListener(
     }
 
     private val speedUnit = SpeedUnit(sharedPreferences)
+
+    private var speedEntryClearerFuture: ScheduledFuture<*> ? = null
+    private val speedEntryClearerRunnable = {
+        speed_.postValue(null)
+    }
 
     private val gpsUpdateIntervalChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
@@ -55,10 +61,15 @@ internal class SpeedListener(
             } else {
                 null
             }
+            onSpeed(location.speed, accuracy)
+        }
+    }
 
-            speedUnit.translate(location.speed, accuracy).let { speedEntry ->
-                speed_.postValue(speedEntry)
-            }
+    private fun onSpeed(speed: Float, accuracy: Float?) {
+        speedUnit.translate(speed, accuracy).let { speedEntry ->
+            speedEntryClearerFuture?.cancel(false)
+            speed_.postValue(speedEntry)
+            speedEntryClearerFuture = executor.schedule(speedEntryClearerRunnable, Settings.speedEntryTotalTimeout, TimeUnit.MILLISECONDS)
         }
     }
 
