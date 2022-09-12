@@ -1,0 +1,2 @@
+- Rename app from Speedster to I am Speed
+- Keep screen on when showing speed
