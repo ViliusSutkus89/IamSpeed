@@ -35,15 +35,16 @@ internal class SpeedListener(
         }
 
     fun start() {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
+        speedUnit.start()
         requestLocationUpdates()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
     }
 
     fun stop() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
         stopLocationUpdates()
+        speedUnit.stop()
         speed_.value = null
-        speedUnit.close()
     }
 
     private val locationChangeListener = LocationListenerCompat { location ->

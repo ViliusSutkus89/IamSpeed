@@ -2,15 +2,14 @@ package com.viliussutkus89.iamspeed.service
 
 import android.content.SharedPreferences
 import com.viliussutkus89.iamspeed.ui.SettingsFragment
-import java.io.Closeable
 
 
-internal class SpeedUnit(private val sharedPreferences: SharedPreferences): Closeable {
+internal class SpeedUnit(private val sharedPreferences: SharedPreferences) {
     enum class Type {
         KMH, MS, MPH
     }
 
-    private var speedUnit: Type = getSpeedUnitSetting()
+    private var speedUnit = getSpeedUnitSetting()
 
     private fun getSpeedUnitSetting(): Type {
         return when (sharedPreferences.getString(SettingsFragment.speedUnit, "kmh")) {
@@ -27,11 +26,11 @@ internal class SpeedUnit(private val sharedPreferences: SharedPreferences): Clos
             }
         }
 
-    init {
+    fun start() {
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesChangeListener)
     }
 
-    override fun close() {
+    fun stop() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesChangeListener)
     }
 
