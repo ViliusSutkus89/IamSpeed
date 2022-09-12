@@ -1,7 +1,7 @@
 package com.viliussutkus89.iamspeed.service
 
 import android.content.SharedPreferences
-import com.viliussutkus89.iamspeed.ui.SettingsFragment
+import com.viliussutkus89.iamspeed.Settings
 
 
 internal class SpeedUnit(private val sharedPreferences: SharedPreferences) {
@@ -9,10 +9,10 @@ internal class SpeedUnit(private val sharedPreferences: SharedPreferences) {
         KMH, MS, MPH
     }
 
-    private var speedUnit = getSpeedUnitSetting()
+    private var speedUnit = loadSpeedUnitSetting()
 
-    private fun getSpeedUnitSetting(): Type {
-        return when (sharedPreferences.getString(SettingsFragment.speedUnit, "kmh")) {
+    private fun loadSpeedUnitSetting(): Type {
+        return when (Settings.get(sharedPreferences, Settings.speedUnit)) {
             "kmh" -> Type.KMH
             "mph" -> Type.MPH
             else -> Type.MS
@@ -21,8 +21,8 @@ internal class SpeedUnit(private val sharedPreferences: SharedPreferences) {
 
     private val preferencesChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
-            if (key == SettingsFragment.speedUnit) {
-                speedUnit = getSpeedUnitSetting()
+            if (key == Settings.speedUnit) {
+                speedUnit = loadSpeedUnitSetting()
             }
         }
 

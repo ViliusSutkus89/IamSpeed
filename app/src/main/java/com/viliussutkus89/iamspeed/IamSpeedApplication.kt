@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import androidx.preference.PreferenceManager
-import com.viliussutkus89.iamspeed.ui.SettingsFragment
 
 
 class IamSpeedApplication: MultiDexApplication() {
@@ -12,25 +11,23 @@ class IamSpeedApplication: MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        sharedPreferences?.let {
-            it.registerOnSharedPreferenceChangeListener(preferencesChangeListener)
+        sharedPreferences.let {
+            it?.registerOnSharedPreferenceChangeListener(preferencesChangeListener)
             updateDayNightMode(it)
         }
     }
 
     private val preferencesChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences?, key: String? ->
-            if (key == SettingsFragment.dayNight) {
-                (sharedPreferences ?: this.sharedPreferences)?.let {
-                    updateDayNightMode(it)
-                }
+            if (key == Settings.dayNight) {
+                updateDayNightMode(sharedPreferences)
             }
         }
 
-    private fun updateDayNightMode(sharedPreferences: SharedPreferences) {
-        val dayNightMode = when (sharedPreferences.getString(SettingsFragment.dayNight, "auto")) {
-            "light" -> AppCompatDelegate.MODE_NIGHT_NO
+    private fun updateDayNightMode(sharedPreferences: SharedPreferences?) {
+        val dayNightMode = when (Settings.get(sharedPreferences, Settings.dayNight)) {
             "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+            "light" -> AppCompatDelegate.MODE_NIGHT_NO
             else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         }
         AppCompatDelegate.setDefaultNightMode(dayNightMode)

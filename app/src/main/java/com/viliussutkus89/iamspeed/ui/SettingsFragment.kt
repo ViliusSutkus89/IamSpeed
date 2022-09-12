@@ -5,15 +5,10 @@ import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.viliussutkus89.iamspeed.R
+import com.viliussutkus89.iamspeed.Settings
 
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
-    companion object {
-        const val dayNight = "dayNight"
-        const val speedUnit = "speedUnit"
-        const val gpsUpdateInterval = "gpsUpdateInterval"
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
         preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
@@ -30,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     private fun updateSummaries() {
-        arrayOf(dayNight, speedUnit, gpsUpdateInterval).forEach {
+        arrayOf(Settings.dayNight, Settings.speedUnit, Settings.gpsUpdateInterval).forEach {
             findPreference<ListPreference>(it)?.let { pref ->
                 pref.summary = pref.entry ?: ""
             }
