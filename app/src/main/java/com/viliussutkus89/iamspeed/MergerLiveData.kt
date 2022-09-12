@@ -6,56 +6,54 @@ import androidx.lifecycle.MediatorLiveData
 // Taken from
 // https://medium.com/nerd-for-tech/merging-livedata-like-you-need-it-3abcf6b756ca
 
+// Modification:
+// private val postValueInsteadOfSetValue: Boolean = false,
+
 sealed class MergerLiveData<TargetType> : MediatorLiveData<TargetType>() {
     class Three<FirstSourceType, SecondSourceType, ThirdSourceType, TargetType>(
         private val firstSource: LiveData<FirstSourceType>,
         private val secondSource: LiveData<SecondSourceType>,
         private val thirdSource: LiveData<ThirdSourceType>,
         private val distinctUntilChanged: Boolean = true,
+        private val postValueInsteadOfSetValue: Boolean = false,
         private val merging: (FirstSourceType, SecondSourceType, ThirdSourceType) -> TargetType
     ) : MediatorLiveData<TargetType>() {
         override fun onActive() {
             super.onActive()
 
             addSource(firstSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         value,
                         secondSource.value ?: return@addSource,
                         thirdSource.value ?: return@addSource,
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
 
             addSource(secondSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         firstSource.value ?: return@addSource,
                         value,
-                        thirdSource.value ?: return@addSource
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                        thirdSource.value ?: return@addSource,
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
 
             addSource(thirdSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         firstSource.value ?: return@addSource,
                         secondSource.value ?: return@addSource,
                         value
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
         }
@@ -75,68 +73,61 @@ sealed class MergerLiveData<TargetType> : MediatorLiveData<TargetType>() {
         private val thirdSource: LiveData<ThirdSourceType>,
         private val fourthSource: LiveData<FourthSourceType>,
         private val distinctUntilChanged: Boolean = true,
+        private val postValueInsteadOfSetValue: Boolean = false,
         private val merging: (FirstSourceType, SecondSourceType, ThirdSourceType, FourthSourceType) -> TargetType
     ) : MediatorLiveData<TargetType>() {
         override fun onActive() {
             super.onActive()
 
             addSource(firstSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         value,
                         secondSource.value ?: return@addSource,
                         thirdSource.value ?: return@addSource,
                         fourthSource.value ?: return@addSource,
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
 
             addSource(secondSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         firstSource.value ?: return@addSource,
                         value,
                         thirdSource.value ?: return@addSource,
                         fourthSource.value ?: return@addSource
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
 
             addSource(thirdSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         firstSource.value ?: return@addSource,
                         secondSource.value ?: return@addSource,
                         value,
                         fourthSource.value ?: return@addSource
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
 
             addSource(fourthSource) { value ->
-                val newValue =
-                    merging(
+                setPostValue(
+                    distinctUntilChanged = distinctUntilChanged,
+                    newValue = merging(
                         firstSource.value ?: return@addSource,
                         secondSource.value ?: return@addSource,
                         thirdSource.value ?: return@addSource,
                         value
-                    )
-
-                postValue(
-                    distinctUntilChanged = distinctUntilChanged,
-                    newValue = newValue
+                    ),
+                    postValueInsteadOfSetValue = postValueInsteadOfSetValue
                 )
             }
         }
@@ -161,4 +152,27 @@ private fun <T> MediatorLiveData<T>.postValue(
     if (distinctUntilChanged && value == newValue) return
 
     postValue(newValue)
+}
+
+private fun <T> MediatorLiveData<T>.setValue(
+    distinctUntilChanged: Boolean,
+    newValue: T
+) {
+    val value = value ?: setValue(newValue)
+
+    if (distinctUntilChanged && value == newValue) return
+
+    setValue(newValue)
+}
+
+private fun <T> MediatorLiveData<T>.setPostValue(
+    distinctUntilChanged: Boolean,
+    newValue: T,
+    postValueInsteadOfSetValue: Boolean
+) {
+    if (postValueInsteadOfSetValue) {
+        postValue(distinctUntilChanged, newValue)
+    } else {
+        setValue(distinctUntilChanged, newValue)
+    }
 }
