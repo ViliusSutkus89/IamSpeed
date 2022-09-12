@@ -25,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     private fun updateSummaries() {
-        arrayOf(Settings.dayNight, Settings.speedUnit, Settings.gpsUpdateInterval).forEach {
+        arrayOf(Settings.lightDark, Settings.speedUnit, Settings.gpsUpdateInterval).forEach {
             findPreference<ListPreference>(it)?.let { pref ->
                 pref.summary = pref.entry ?: ""
             }

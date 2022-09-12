@@ -2,9 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <ListPreference
             android:key="dayNight"
-            android:title="@string/preference_day_night"
-            android:entries="@array/day_night_labels"
-            android:entryValues="@array/day_night_values"
+            android:title="@string/preference_light_dark"
+            android:entries="@array/light_dark_labels"
+            android:entryValues="@array/light_dark_values"
             android:defaultValue="auto" />
 
         <ListPreference

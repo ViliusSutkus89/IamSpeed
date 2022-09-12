@@ -4,12 +4,12 @@ import android.content.SharedPreferences
 
 class Settings {
     companion object {
-        const val dayNight = "dayNight"
+        const val lightDark = "lightDark"
         const val speedUnit = "speedUnit"
         const val gpsUpdateInterval = "gpsUpdateInterval"
 
         private val defaults = mapOf(
-            Pair(dayNight, "dark"),
+            Pair(lightDark, "dark"),
             Pair(speedUnit, "kmh"),
             Pair(gpsUpdateInterval, "300ms")
         )
