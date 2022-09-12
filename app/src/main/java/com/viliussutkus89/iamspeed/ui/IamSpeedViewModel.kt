@@ -1,20 +1,22 @@
 package com.viliussutkus89.iamspeed.ui
 
 import android.Manifest
-import android.app.Application
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.location.LocationManagerCompat
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.viliussutkus89.iamspeed.MergerLiveData
 import com.viliussutkus89.iamspeed.service.SpeedEntry
 import com.viliussutkus89.iamspeed.service.SpeedListenerService
 
 
-class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
+class IamSpeedViewModel: ViewModel() {
     companion object {
         private const val TAG = "MainViewModel"
     }
@@ -23,38 +25,26 @@ class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
     val speed: LiveData<SpeedEntry?> get() = SpeedListenerService.speed
     val satelliteCount: LiveData<Int> get() = SpeedListenerService.satelliteCount
 
-    private val app: Application get() = getApplication<Application>()
-
-    class Factory(private val app: Application): ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(IamSpeedViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return IamSpeedViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct MainViewModel")
-        }
-    }
-
     private val _showLocationPermissionRequest = MutableLiveData(true)
     val showLocationPermissionRequest: LiveData<Boolean> get() = _showLocationPermissionRequest
 
     private val _showFineLocationPermissionRequest = MutableLiveData(false)
     val showFineLocationPermissionRequest: LiveData<Boolean> get() = _showFineLocationPermissionRequest
 
-    fun checkPermissions() {
+    fun checkPermissions(context: Context) {
         when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(app, Manifest.permission.ACCESS_FINE_LOCATION) -> {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) -> {
                 _showLocationPermissionRequest.value = false
                 _showFineLocationPermissionRequest.value = false
             }
-            ContextCompat.checkSelfPermission(app, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 _showLocationPermissionRequest.value = false
                 _showFineLocationPermissionRequest.value = true
             }
             else -> {
                 _showLocationPermissionRequest.value = true
                 _showFineLocationPermissionRequest.value = false
-                stop()
+                stop(context)
             }
         }
     }
@@ -65,8 +55,8 @@ class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
     private val _showEnableGpsLocationRequest = MutableLiveData(true)
     val showEnableGpsLocationRequest: LiveData<Boolean> get() = _showEnableGpsLocationRequest
 
-    fun checkLocationEnabled() {
-        getSystemService(app, LocationManager::class.java)?.let { lm ->
+    fun checkLocationEnabled(context: Context) {
+        getSystemService(context, LocationManager::class.java)?.let { lm ->
             val isLocationAvailable = LocationManagerCompat.isLocationEnabled(lm)
             val isGpsProviderEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
             _showEnableLocationRequest.value = !isLocationAvailable
@@ -77,9 +67,9 @@ class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
     }
 
     val serviceCanBeStartedOnStartup = MergerLiveData.Three(
-        _showLocationPermissionRequest,
-        _showEnableLocationRequest,
-        _showEnableGpsLocationRequest,
+        showLocationPermissionRequest,
+        showEnableLocationRequest,
+        showEnableGpsLocationRequest,
     ) { noLocationPermission,
         locationDisabled,
         noGps ->
@@ -88,9 +78,9 @@ class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
     }
 
     val serviceCanBeStarted = MergerLiveData.Four(
-        _showLocationPermissionRequest,
-        _showEnableLocationRequest,
-        _showEnableGpsLocationRequest,
+        showLocationPermissionRequest,
+        showEnableLocationRequest,
+        showEnableGpsLocationRequest,
         started
     ) { noLocationPermission,
         locationDisabled,
@@ -100,11 +90,11 @@ class IamSpeedViewModel(app: Application): AndroidViewModel(app) {
         !(noLocationPermission || locationDisabled || noGps || alreadyStarted)
     }
 
-    fun start() {
-        SpeedListenerService.startSpeedListener(app)
+    fun start(context: Context) {
+        SpeedListenerService.startSpeedListener(context)
     }
 
-    fun stop() {
-        SpeedListenerService.stopSpeedListener(app)
+    fun stop(context: Context) {
+        SpeedListenerService.stopSpeedListener(context)
     }
 }

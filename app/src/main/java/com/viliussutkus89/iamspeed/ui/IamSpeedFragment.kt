@@ -16,7 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.viliussutkus89.iamspeed.R
@@ -27,22 +27,15 @@ class IamSpeedFragment: Fragment() {
     private var _binding: FragmentIamSpeedBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: IamSpeedViewModel by activityViewModels {
-        IamSpeedViewModel.Factory(requireActivity().application)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+    private val viewModel: IamSpeedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         requireActivity().let {
-        viewModel.checkPermissions()
-        viewModel.checkLocationEnabled()
+            viewModel.checkPermissions(it)
+            viewModel.checkLocationEnabled(it)
             it.addMenuProvider(menuProvider, viewLifecycleOwner)
             it.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
         }
@@ -62,7 +55,7 @@ class IamSpeedFragment: Fragment() {
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        viewModel.checkPermissions()
+        viewModel.checkPermissions(requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,12 +82,12 @@ class IamSpeedFragment: Fragment() {
         binding.buttonEnableGps.setOnClickListener(openSettings)
 
         binding.buttonStart.setOnClickListener {
-            viewModel.start()
+            viewModel.start(requireContext())
         }
 
         viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.start()
+                viewModel.start(requireContext())
             }
         }
 
@@ -171,7 +164,7 @@ class IamSpeedFragment: Fragment() {
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
                 R.id.stop -> {
-                    viewModel.stop()
+                    viewModel.stop(requireContext())
                     true
                 }
                 R.id.settings -> {
