@@ -2,7 +2,7 @@ package com.viliussutkus89.iamspeed
 
 import android.content.SharedPreferences
 
-class Settings {
+class AppSettings {
     companion object {
         const val lightDark = "lightDark"
         const val speedUnit = "speedUnit"

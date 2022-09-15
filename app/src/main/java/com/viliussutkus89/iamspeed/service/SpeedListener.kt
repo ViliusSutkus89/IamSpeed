@@ -9,7 +9,7 @@ import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.viliussutkus89.iamspeed.Settings
+import com.viliussutkus89.iamspeed.AppSettings
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -35,7 +35,7 @@ internal class SpeedListener(
 
     private val gpsUpdateIntervalChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
-            if (key == Settings.gpsUpdateInterval) {
+            if (key == AppSettings.gpsUpdateInterval) {
                 stopLocationUpdates()
                 requestLocationUpdates()
             }
@@ -69,12 +69,12 @@ internal class SpeedListener(
         speedUnit.translate(speed, accuracy).let { speedEntry ->
             speedEntryClearerFuture?.cancel(false)
             speed_.postValue(speedEntry)
-            speedEntryClearerFuture = executor.schedule(speedEntryClearerRunnable, Settings.speedEntryTotalTimeout, TimeUnit.MILLISECONDS)
+            speedEntryClearerFuture = executor.schedule(speedEntryClearerRunnable, AppSettings.speedEntryTotalTimeout, TimeUnit.MILLISECONDS)
         }
     }
 
     private fun requestLocationUpdates() {
-        val interval = Settings.get(sharedPreferences, Settings.gpsUpdateInterval)
+        val interval = AppSettings.get(sharedPreferences, AppSettings.gpsUpdateInterval)
             .removeSuffix("ms").toLong()
 
         val locationRequest = LocationRequestCompat

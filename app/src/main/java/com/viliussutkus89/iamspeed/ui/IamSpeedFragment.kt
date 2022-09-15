@@ -19,8 +19,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.viliussutkus89.iamspeed.R
-import com.viliussutkus89.iamspeed.Settings.Companion.speedEntryStartFadingAfter
-import com.viliussutkus89.iamspeed.Settings.Companion.speedEntryTotalTimeout
+import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryStartFadingAfter
+import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryTotalTimeout
 import com.viliussutkus89.iamspeed.databinding.FragmentIamSpeedBinding
 
 
