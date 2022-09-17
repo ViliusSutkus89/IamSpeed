@@ -22,10 +22,4 @@ class AboutFragment: Fragment(R.layout.fragment_about) {
             version = BuildConfig.VERSION_NAME
         }.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<Button>(R.id.show_licenses).setOnClickListener {
-            findNavController().navigate(AboutFragmentDirections.actionAboutFragmentToAboutLibs())
-        }
-    }
 }

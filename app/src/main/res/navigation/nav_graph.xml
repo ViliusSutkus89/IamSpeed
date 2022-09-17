@@ -19,20 +19,17 @@
             app:destination="@id/aboutFragment" />
     </fragment>
 
-    <include app:graph="@navigation/aboutlibs_navigation" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.viliussutkus89.iamspeed.ui.AboutFragment"
         android:label="@string/menu_about"
         tools:layout="@layout/fragment_about">
-        <action
-            android:id="@+id/action_aboutFragment_to_about_libs"
-            app:destination="@+id/about_libraries" />
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.viliussutkus89.iamspeed.ui.SettingsFragment"
-        android:label="@string/menu_settings" />
+        android:label="@string/menu_settings"
+        />
 
 </navigation>
