@@ -7,6 +7,7 @@ import androidx.core.location.LocationCompat
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
+import androidx.core.os.CancellationSignal
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.viliussutkus89.iamspeed.AppSettings
@@ -32,6 +33,8 @@ internal class SpeedListener(
     private val speedEntryClearerRunnable = {
         speed_.postValue(null)
     }
+
+    private val getCurrentLocationCancellationSignal = CancellationSignal()
 
     private val gpsUpdateIntervalChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
@@ -93,7 +96,7 @@ internal class SpeedListener(
             LocationManagerCompat.getCurrentLocation(
                 locationManager,
                 LocationManager.GPS_PROVIDER,
-                null,
+                getCurrentLocationCancellationSignal,
                 executor
             ) { it: Location? ->
                 it?.let {
