@@ -1,7 +1,6 @@
 package com.viliussutkus89.iamspeed.service
 
 import android.content.SharedPreferences
-import android.location.Location
 import android.location.LocationManager
 import androidx.core.location.LocationCompat
 import androidx.core.location.LocationListenerCompat
@@ -98,10 +97,10 @@ internal class SpeedListener(
                 LocationManager.GPS_PROVIDER,
                 getCurrentLocationCancellationSignal,
                 executor
-            ) { it: Location? ->
-                it?.let {
-                    locationChangeListener.onLocationChanged(it)
-                }
+            ) {
+                // Ignore returned location.
+                // requestLocationUpdates() will not deliver any updates until
+                // someone (can be other app) calls getCurrentLocation.
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
