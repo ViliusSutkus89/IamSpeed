@@ -88,6 +88,13 @@ class IamSpeedFragment: Fragment() {
         viewModel.checkPermissions(requireContext())
     }
 
+    private val isRunningTest: Boolean = try {
+        Class.forName("androidx.test.espresso.Espresso")
+        true
+    } catch (e: ClassNotFoundException) {
+        false
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val requestLocation = { _: View ->
             locationPermissionRequest.launch(
@@ -118,7 +125,9 @@ class IamSpeedFragment: Fragment() {
             binding.speed.let { speedBinding ->
                 speedBinding.clearAnimation()
                 speedBinding.text = speed?.let {
-                    speedBinding.startAnimation(fadeoutAnimation)
+                    if (!isRunningTest) {
+                        speedBinding.startAnimation(fadeoutAnimation)
+                    }
                     it.speedInt.toString()
                 } ?: "???"
             }
