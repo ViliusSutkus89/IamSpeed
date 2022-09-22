@@ -1,5 +1,6 @@
 # [I am Speed](https://www.viliusSutkus89.com/i-am-speed)
-Android speedometer app with big numbers
+
+Android speedometer app with Heads-Up Display mode
 
 [![test](https://github.com/ViliusSutkus89/IamSpeed/actions/workflows/test.yml/badge.svg)](https://github.com/ViliusSutkus89/IamSpeed/actions/workflows/test.yml)
 
