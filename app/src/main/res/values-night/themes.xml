@@ -14,5 +14,12 @@
         <!-- Customize your theme here. -->
 
         <item name="android:background">@color/black</item>
+
+        <item name="materialButtonStyle">@style/buttonStyle</item>
     </style>
+
+    <style name="buttonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@color/purple_200</item>
+    </style>
+
 </resources>
