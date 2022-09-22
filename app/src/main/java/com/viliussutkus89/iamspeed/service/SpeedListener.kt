@@ -20,6 +20,7 @@ package com.viliussutkus89.iamspeed.service
 
 import android.content.SharedPreferences
 import android.location.LocationManager
+import androidx.annotation.MainThread
 import androidx.core.location.LocationCompat
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
@@ -61,12 +62,14 @@ internal class SpeedListener(
             }
         }
 
+    @MainThread
     fun start() {
         speedUnit.start()
         requestLocationUpdates()
         sharedPreferences.registerOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
     }
 
+    @MainThread
     fun stop() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
         getCurrentLocationCancellationSignal.cancel()
@@ -94,6 +97,7 @@ internal class SpeedListener(
         }
     }
 
+    @MainThread
     private fun requestLocationUpdates() {
         val interval = AppSettings.get(sharedPreferences, AppSettings.gpsUpdateInterval)
             .removeSuffix("ms").toLong()
@@ -126,6 +130,7 @@ internal class SpeedListener(
         }
     }
 
+    @MainThread
     private fun stopLocationUpdates() {
         try {
             LocationManagerCompat.removeUpdates(locationManager, locationChangeListener)

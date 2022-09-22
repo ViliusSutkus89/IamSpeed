@@ -30,6 +30,7 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.LocationManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -56,6 +57,7 @@ class SpeedListenerService: LifecycleService() {
         val satelliteCount: LiveData<Int> get() = SatelliteCountListener.satelliteCount
 
         private const val START_INTENT_ACTION = "START"
+        @MainThread
         fun startSpeedListener(context: Context) {
             val intent = Intent(context, SpeedListenerService::class.java).also {
                 it.action = START_INTENT_ACTION
@@ -68,6 +70,7 @@ class SpeedListenerService: LifecycleService() {
         }
 
         private const val STOP_INTENT_ACTION = "STOP"
+        @MainThread
         fun stopSpeedListener(context: Context) {
             val intent = Intent(context, SpeedListenerService::class.java).also {
                 it.action = STOP_INTENT_ACTION

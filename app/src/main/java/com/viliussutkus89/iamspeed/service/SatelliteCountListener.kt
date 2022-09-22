@@ -19,6 +19,7 @@
 package com.viliussutkus89.iamspeed.service
 
 import android.location.LocationManager
+import androidx.annotation.MainThread
 import androidx.core.location.GnssStatusCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.LiveData
@@ -52,6 +53,7 @@ internal class SatelliteCountListener(
         }
     }
 
+    @MainThread
     fun start() {
         try {
             LocationManagerCompat.registerGnssStatusCallback(locationManager, executor, gnssStatusCallback)
@@ -60,6 +62,7 @@ internal class SatelliteCountListener(
         }
     }
 
+    @MainThread
     fun stop() {
         try {
             LocationManagerCompat.unregisterGnssStatusCallback(locationManager, gnssStatusCallback)
