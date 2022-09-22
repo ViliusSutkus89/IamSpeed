@@ -51,6 +51,7 @@ internal class SpeedListener(
 
     fun stop() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(gpsUpdateIntervalChangeListener)
+        getCurrentLocationCancellationSignal.cancel()
         stopLocationUpdates()
         speedUnit.stop()
         speed_.value = null
