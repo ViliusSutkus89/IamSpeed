@@ -78,7 +78,7 @@
             app:autoSizeTextType="uniform"
             app:autoSizeMaxTextSize="600dp"
             android:lines="1"
-            android:fontFamily="@font/lets_go_digital_regular"
+            app:fontFamily="@font/lets_go_digital_regular"
             android:visibility="@{viewModel.started ? View.VISIBLE : View.GONE }" />
 
     </LinearLayout>
