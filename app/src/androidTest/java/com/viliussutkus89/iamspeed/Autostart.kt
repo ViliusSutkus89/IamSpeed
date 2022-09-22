@@ -33,6 +33,7 @@ import com.viliussutkus89.iamspeed.rule.IdlingResourceRule
 import com.viliussutkus89.iamspeed.rule.ScreenshotFailedTestRule
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
 import com.viliussutkus89.iamspeed.utils.LocationControl
+import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
@@ -55,6 +56,12 @@ class Autostart {
         @JvmStatic
         fun enableGps() {
             LocationControl(InstrumentationRegistry.getInstrumentation()).enableGps()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun disableLocation() {
+            LocationControl(InstrumentationRegistry.getInstrumentation()).disable()
         }
     }
 

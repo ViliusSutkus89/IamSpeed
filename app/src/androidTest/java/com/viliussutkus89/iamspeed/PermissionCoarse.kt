@@ -36,6 +36,7 @@ import com.viliussutkus89.iamspeed.rule.ScreenshotFailedTestRule
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
 import com.viliussutkus89.iamspeed.utils.LocationControl
 import org.hamcrest.Matchers.not
+import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
@@ -55,10 +56,18 @@ class PermissionCoarse {
             IdlingPolicies.setMasterPolicyTimeout(5, TimeUnit.MINUTES)
         }
 
+        private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
+
         @BeforeClass
         @JvmStatic
-        fun disableGps() {
-            LocationControl(InstrumentationRegistry.getInstrumentation()).enableGps()
+        fun enableGps() {
+            LocationControl(instrumentation).enableGps()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun disableLocation() {
+            LocationControl(instrumentation).disable()
         }
     }
 

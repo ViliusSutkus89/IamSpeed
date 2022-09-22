@@ -59,7 +59,7 @@ class ToggleLocation {
 
         private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
 
-        @BeforeClass @JvmStatic
+        @BeforeClass @AfterClass @JvmStatic
         fun disableLocation() {
             LocationControl(instrumentation).disable()
         }
