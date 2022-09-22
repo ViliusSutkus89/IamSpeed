@@ -6,8 +6,10 @@ import androidx.lifecycle.MediatorLiveData
 // Taken from
 // https://medium.com/nerd-for-tech/merging-livedata-like-you-need-it-3abcf6b756ca
 
-// Modification:
+// Modifications:
 // private val postValueInsteadOfSetValue: Boolean = false,
+//
+// not caching value before comparison in setValue and postValue
 
 sealed class MergerLiveData<TargetType> : MediatorLiveData<TargetType>() {
     class Three<FirstSourceType, SecondSourceType, ThirdSourceType, TargetType>(
@@ -147,8 +149,6 @@ private fun <T> MediatorLiveData<T>.postValue(
     distinctUntilChanged: Boolean,
     newValue: T
 ) {
-    val value = value ?: postValue(newValue)
-
     if (distinctUntilChanged && value == newValue) return
 
     postValue(newValue)
@@ -158,11 +158,9 @@ private fun <T> MediatorLiveData<T>.setValue(
     distinctUntilChanged: Boolean,
     newValue: T
 ) {
-    val value = value ?: setValue(newValue)
-
     if (distinctUntilChanged && value == newValue) return
 
-    setValue(newValue)
+    value = newValue
 }
 
 private fun <T> MediatorLiveData<T>.setPostValue(
