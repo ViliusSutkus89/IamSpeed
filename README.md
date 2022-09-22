@@ -8,7 +8,7 @@ Android speedometer app with Heads-Up Display mode
 
 ![Actual use](images/hero.jpg)
 
-![Screenshot](images/screenshot1.png)
+![Screenshot](images/screenshot.png)
 
 # Requirements
 
