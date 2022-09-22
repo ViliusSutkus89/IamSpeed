@@ -17,6 +17,7 @@ android {
         versionName "1.1.1"
         if (project.hasProperty('test_build')) {
             versionNameSuffix = ".unreleased"
+            applicationIdSuffix = ".unreleased"
         }
 
         vectorDrawables.useSupportLibrary true
