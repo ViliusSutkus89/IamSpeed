@@ -20,6 +20,7 @@ package com.viliussutkus89.iamspeed
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -37,11 +38,19 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import java.util.concurrent.TimeUnit
 
 
 @RunWith(AndroidJUnit4::class)
 class Autostart {
     companion object {
+        @BeforeClass
+        @JvmStatic
+        fun setMasterIdlingPolicyTimeout() {
+            // Hoping this will give more time to start Activity in cloud emulator
+            IdlingPolicies.setMasterPolicyTimeout(5, TimeUnit.MINUTES)
+        }
+
         @BeforeClass
         @JvmStatic
         fun enableGps() {
