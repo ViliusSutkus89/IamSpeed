@@ -44,7 +44,7 @@ class IamSpeedViewModel: ViewModel() {
             else -> {
                 _showLocationPermissionRequest.value = true
                 _showFineLocationPermissionRequest.value = false
-                stop(context)
+                // No need to stop, because on permission drop the app should be auto restarted
             }
         }
     }
