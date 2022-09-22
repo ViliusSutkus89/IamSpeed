@@ -19,9 +19,12 @@
 package com.viliussutkus89.iamspeed
 
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import androidx.preference.PreferenceManager
+import com.viliussutkus89.iamspeed.util.CountingIdlingResourceFactory
 
 
 class IamSpeedApplication: MultiDexApplication() {
@@ -49,5 +52,17 @@ class IamSpeedApplication: MultiDexApplication() {
             else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         }
         AppCompatDelegate.setDefaultNightMode(dayNightMode)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    internal val configurationChangedIdlingResource = CountingIdlingResourceFactory.create("${this::class.java}.configurationChanged")
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        configurationChangedIdlingResource?.let {
+            if (!it.isIdleNow) {
+                it.decrement()
+            }
+        }
+        super.onConfigurationChanged(newConfig)
     }
 }

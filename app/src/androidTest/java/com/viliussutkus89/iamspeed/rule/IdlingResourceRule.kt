@@ -20,6 +20,7 @@ package com.viliussutkus89.iamspeed.rule
 
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.viliussutkus89.iamspeed.IamSpeedApplication
 import com.viliussutkus89.iamspeed.service.SpeedListenerService
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
 import org.junit.rules.ExternalResource
@@ -32,6 +33,7 @@ class IdlingResourceRule(private val activityScenario: ActivityScenarioRule<IamS
         activityScenario.scenario.onActivity {
             idlingResources.add(it.locationSettingsChangedIdlingResource!!)
             idlingResources.add(it.serviceCanBeStartedOnStartupIdlingResource!!)
+            idlingResources.add((it.application as IamSpeedApplication).configurationChangedIdlingResource!!)
         }
         IdlingRegistry.getInstance().let { idlingRegistry ->
             idlingResources.forEach { idlingResource ->
