@@ -52,11 +52,22 @@ class IamSpeedFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().let {
-            viewModel.checkPermissions(it)
-            viewModel.checkLocationEnabled(it)
-            it.addMenuProvider(menuProvider, viewLifecycleOwner)
-            it.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
+        requireActivity().let { context ->
+            viewModel.checkPermissions(context)
+            viewModel.checkLocationEnabled(context)
+            viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) { serviceCanBeStartedOnStartup ->
+                if (serviceCanBeStartedOnStartup) {
+                    viewModel.start(context)
+                }
+
+                (activity as IamSpeedActivity?)?.serviceCanBeStartedOnStartupIdlingResource?.let {
+                    if (!it.isIdleNow) {
+                        it.decrement()
+                    }
+                }
+            }
+            context.addMenuProvider(menuProvider, viewLifecycleOwner)
+            context.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
         }
         _binding = FragmentIamSpeedBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
@@ -101,17 +112,6 @@ class IamSpeedFragment: Fragment() {
         binding.buttonEnableGps.setOnClickListener(openSettings)
         binding.buttonStart.setOnClickListener {
             viewModel.start(requireContext())
-        }
-
-        viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.start(requireContext())
-            }
-            (activity as IamSpeedActivity?)?.serviceCanBeStartedOnStartupIdlingResource?.let { iR ->
-                if (!iR.isIdleNow) {
-                    iR.decrement()
-                }
-            }
         }
 
         viewModel.speed.observe(viewLifecycleOwner) { speed ->
