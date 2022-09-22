@@ -116,9 +116,6 @@ class IamSpeedFragment: Fragment() {
     private val locationManagerBroadcastReceiver = object: BroadcastReceiver() {
         val intentFilter = IntentFilter().also {
             it.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                it.addAction(LocationManager.MODE_CHANGED_ACTION)
-            }
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
