@@ -19,12 +19,14 @@
 package com.viliussutkus89.iamspeed
 
 import android.Manifest
+import android.os.Build
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.viliussutkus89.iamspeed.rule.CloseSystemDialogsTestRule
@@ -41,6 +43,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
 class PermissionCoarse {
     companion object {
         @BeforeClass
