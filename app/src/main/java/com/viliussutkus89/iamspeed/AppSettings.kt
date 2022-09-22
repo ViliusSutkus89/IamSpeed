@@ -1,6 +1,23 @@
+/*
+ * AppSettings.kt
+ *
+ * Copyright (C) 2022 https://www.ViliusSutkus89.com/i-am-speed/
+ *
+ * I am Speed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.viliussutkus89.iamspeed
 
-import android.content.SharedPreferences
 
 class AppSettings {
     companion object {
@@ -14,7 +31,7 @@ class AppSettings {
             Pair(gpsUpdateInterval, "300ms")
         )
 
-        fun get(sharedPreferences: SharedPreferences?, key: String): String {
+        fun get(sharedPreferences: android.content.SharedPreferences?, key: String): String {
             val default = stringDefaults[key] ?: ""
             return sharedPreferences?.getString(key, default) ?: default
         }
