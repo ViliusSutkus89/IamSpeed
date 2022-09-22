@@ -70,19 +70,16 @@ class SpeedListenerService: LifecycleService() {
         }
 
         override fun onReceive(context: Context, intent: Intent?) {
-            if (started_.value == true) {
-                when (intent?.action) {
-                    STOP_BROADCAST_ACTION -> stop()
-                    LocationManager.PROVIDERS_CHANGED_ACTION, LocationManager.MODE_CHANGED_ACTION -> {
-                        var isGpsEnabled = false
-                        try {
-                            isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                        } catch (e: SecurityException) {
-                            e.printStackTrace()
-                        }
-                        if (!isGpsEnabled) {
-                            stop()
-                        }
+            when (intent?.action) {
+                STOP_BROADCAST_ACTION -> {
+                    stoppingIdlingResource?.increment()
+                    stop()
+                }
+
+                LocationManager.PROVIDERS_CHANGED_ACTION, LocationManager.MODE_CHANGED_ACTION -> {
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        stoppingIdlingResource?.increment()
+                        stop()
                     }
                 }
             }
