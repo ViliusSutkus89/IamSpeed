@@ -75,8 +75,8 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
 
         val window = requireActivity().window
         if (Build.VERSION.SDK_INT >= 30) {
@@ -90,6 +90,7 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
         }
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val speedView = view.findViewById<TextView>(R.id.speed)
 

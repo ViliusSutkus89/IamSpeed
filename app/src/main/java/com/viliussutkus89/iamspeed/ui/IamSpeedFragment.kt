@@ -34,7 +34,6 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryStartFadingAfter
@@ -77,8 +76,8 @@ class IamSpeedFragment: Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         requireContext().unregisterReceiver(locationManagerBroadcastReceiver)
         _binding = null
     }
