@@ -26,7 +26,7 @@ import org.junit.rules.ExternalResource
 
 
 class CloseSystemDialogsTestRule: ExternalResource() {
-    lateinit var dialogClicker: Job
+    var dialogClicker: Job? = null
 
     override fun before() {
         // ACTION_CLOSE_SYSTEM_DIALOGS is perfectly fine in tests
@@ -62,6 +62,6 @@ class CloseSystemDialogsTestRule: ExternalResource() {
     }
 
     override fun after() {
-        dialogClicker.cancel()
+        dialogClicker?.cancel()
     }
 }
