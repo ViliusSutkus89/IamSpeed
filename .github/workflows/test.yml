@@ -102,6 +102,9 @@ jobs:
       matrix:
         include:
           - arch: x86
+            api-level: 15
+            api-type-target: default
+          - arch: x86
             api-level: 16
             api-type-target: default
           - arch: x86

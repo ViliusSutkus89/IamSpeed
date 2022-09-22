@@ -5,7 +5,7 @@ Android speedometer app with big numbers
 
 [![I am Speed is available at Amazon Appstore!](badges/amazon-appstore-badge-english-white_60.png)](https://www.amazon.com/gp/product/B0BD6DJZLG)
 
-Supports Android 4.1 (Jelly Bean) and up.
+Supports Android 4 - Ice Cream Sandwich and newer.
 
 # Privacy policy
 
