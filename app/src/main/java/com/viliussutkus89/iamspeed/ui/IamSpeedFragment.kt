@@ -99,7 +99,6 @@ class IamSpeedFragment: Fragment() {
         }
         binding.buttonEnableLocation.setOnClickListener(openSettings)
         binding.buttonEnableGps.setOnClickListener(openSettings)
-
         binding.buttonStart.setOnClickListener {
             viewModel.start(requireContext())
         }
@@ -107,6 +106,11 @@ class IamSpeedFragment: Fragment() {
         viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.start(requireContext())
+            }
+            (activity as IamSpeedActivity?)?.serviceCanBeStartedOnStartupIdlingResource?.let { iR ->
+                if (!iR.isIdleNow) {
+                    iR.decrement()
+                }
             }
         }
 
@@ -138,6 +142,11 @@ class IamSpeedFragment: Fragment() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             viewModel.checkLocationEnabled(requireContext())
+            (activity as IamSpeedActivity?)?.locationSettingsChangedIdlingResource?.let {
+                if (!it.isIdleNow) {
+                    it.decrement()
+                }
+            }
         }
     }
 

@@ -32,14 +32,17 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
+import androidx.test.espresso.IdlingResource
 import com.viliussutkus89.iamspeed.R
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
+import com.viliussutkus89.iamspeed.util.CountingIdlingResourceFactory
 import java.util.concurrent.Executors
 
 
@@ -59,6 +62,7 @@ class SpeedListenerService: LifecycleService() {
         private const val START_INTENT_ACTION = "START"
         @MainThread
         fun startSpeedListener(context: Context) {
+            startingIdlingResource?.increment()
             val intent = Intent(context, SpeedListenerService::class.java).also {
                 it.action = START_INTENT_ACTION
             }
@@ -72,13 +76,28 @@ class SpeedListenerService: LifecycleService() {
         private const val STOP_INTENT_ACTION = "STOP"
         @MainThread
         fun stopSpeedListener(context: Context) {
+            stoppingIdlingResource?.increment()
             val intent = Intent(context, SpeedListenerService::class.java).also {
                 it.action = STOP_INTENT_ACTION
             }
             context.startService(intent)
         }
 
-        private const val STOP_BROADCAST_ACTION = "com.viliussutkus89.iamspeed.STOP_BROADCAST"
+        @VisibleForTesting
+        internal const val STOP_BROADCAST_ACTION = "com.viliussutkus89.iamspeed.STOP_BROADCAST"
+
+        private val startingIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.starting")
+        private val stoppingIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.stopping")
+
+        @VisibleForTesting
+        internal val locationSettingsChangedIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.locationSettingsChanged")
+
+        @VisibleForTesting
+        internal val idlingResources: List<IdlingResource> = listOfNotNull(
+            startingIdlingResource,
+            stoppingIdlingResource,
+            locationSettingsChangedIdlingResource
+        )
     }
 
     private val stopBroadcastReceiver = object: BroadcastReceiver() {
@@ -99,6 +118,7 @@ class SpeedListenerService: LifecycleService() {
                         stoppingIdlingResource?.increment()
                         stop()
                     }
+                    locationSettingsChangedIdlingResource?.decrement()
                 }
             }
         }
@@ -187,6 +207,7 @@ class SpeedListenerService: LifecycleService() {
         }
 
         started_.value = true
+        startingIdlingResource?.decrement()
     }
 
     private fun stop() {
@@ -205,6 +226,7 @@ class SpeedListenerService: LifecycleService() {
             @Suppress("DEPRECATION")
             stopForeground(true)
         }
+        stoppingIdlingResource?.decrement()
         started_.value = false
         stopSelf()
     }

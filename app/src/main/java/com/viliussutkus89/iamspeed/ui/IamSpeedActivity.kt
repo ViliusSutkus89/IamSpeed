@@ -19,17 +19,25 @@
 package com.viliussutkus89.iamspeed.ui
 
 import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.viliussutkus89.iamspeed.R
+import com.viliussutkus89.iamspeed.util.CountingIdlingResourceFactory
 
 
 class IamSpeedActivity: AppCompatActivity(R.layout.activity_iamspeed) {
     private val navController: NavController get() =
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
             .navController
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    internal val locationSettingsChangedIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.locationSettingsChanged")
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    internal val serviceCanBeStartedOnStartupIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.serviceCanBeStartedOnStartup")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
