@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <ListPreference
-            android:key="dayNight"
+            android:key="lightDark"
             android:title="@string/preference_light_dark"
             android:entries="@array/light_dark_labels"
             android:entryValues="@array/light_dark_values"
-            android:defaultValue="auto" />
+            android:defaultValue="dark" />
 
         <ListPreference
             android:key="speedUnit"
