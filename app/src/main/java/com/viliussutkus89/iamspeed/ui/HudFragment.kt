@@ -50,9 +50,9 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
         val window = requireActivity().window
         if (Build.VERSION.SDK_INT >= 30) {
-//            window.insetsController?.hide(WindowInsets.Type.statusBars())
             window.insetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else if (Build.VERSION.SDK_INT in 16..29) {
             @Suppress("DEPRECATION")
@@ -80,17 +80,15 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
 
         val window = requireActivity().window
         if (Build.VERSION.SDK_INT >= 30) {
-//            window.insetsController?.hide(WindowInsets.Type.statusBars())
             window.insetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else if (Build.VERSION.SDK_INT in 16..29) {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
-            (requireActivity() as AppCompatActivity).supportActionBar?.show()
         } else {
             @Suppress("DEPRECATION")
             window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            (requireActivity() as AppCompatActivity).supportActionBar?.show()
         }
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val speedView = view.findViewById<TextView>(R.id.speed)
