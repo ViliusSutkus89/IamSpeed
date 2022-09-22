@@ -33,6 +33,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +47,7 @@ class IamSpeedFragment: Fragment() {
     private var _binding: FragmentIamSpeedBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: IamSpeedViewModel by viewModels()
+    private val viewModel by activityViewModels<IamSpeedViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +57,7 @@ class IamSpeedFragment: Fragment() {
             viewModel.checkPermissions(context)
             viewModel.checkLocationEnabled(context)
             viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) { serviceCanBeStartedOnStartup ->
-                if (serviceCanBeStartedOnStartup) {
+                if (serviceCanBeStartedOnStartup && viewModel.started.value != true) {
                     viewModel.start(context)
                 }
 
@@ -176,11 +177,16 @@ class IamSpeedFragment: Fragment() {
 
             viewModel.started.observe(viewLifecycleOwner) {
                 menu.findItem(R.id.stop)?.isVisible = it
+                menu.findItem(R.id.hud)?.isVisible = it
             }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
+                R.id.hud -> {
+                    findNavController().navigate(IamSpeedFragmentDirections.actionIamSpeedFragmentToHudFragment())
+                    true
+                }
                 R.id.stop -> {
                     viewModel.stop(requireContext())
                     true

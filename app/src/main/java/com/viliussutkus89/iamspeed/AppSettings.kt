@@ -24,6 +24,7 @@ class AppSettings {
         const val lightDark = "lightDark"
         const val speedUnit = "speedUnit"
         const val gpsUpdateInterval = "gpsUpdateInterval"
+        const val hudMirror = "hudMirror"
 
         private val stringDefaults = mapOf(
             Pair(lightDark, "dark"),

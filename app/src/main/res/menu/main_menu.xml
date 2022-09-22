@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/hud"
+        android:icon="@drawable/ic_outline_approval_24"
+        android:title="@string/menu_hud"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/stop"
         android:icon="@drawable/ic_outline_stop_circle_24"
         android:title="@string/menu_stop"

@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-        <ListPreference
-            android:key="lightDark"
-            android:title="@string/preference_light_dark"
-            android:entries="@array/light_dark_labels"
-            android:entryValues="@array/light_dark_values"
-            android:defaultValue="dark" />
+    <ListPreference
+        android:defaultValue="dark"
+        android:entries="@array/light_dark_labels"
+        android:entryValues="@array/light_dark_values"
+        android:key="lightDark"
+        android:title="@string/preference_light_dark" />
 
-        <ListPreference
-            android:key="speedUnit"
-            android:title="@string/preference_speed_unit"
-            android:entries="@array/speed_unit_labels"
-            android:entryValues="@array/speed_unit_values"
-            android:defaultValue="kmh" />
+    <ListPreference
+        android:defaultValue="kmh"
+        android:entries="@array/speed_unit_labels"
+        android:entryValues="@array/speed_unit_values"
+        android:key="speedUnit"
+        android:title="@string/preference_speed_unit" />
 
-        <ListPreference
-            android:key="gpsUpdateInterval"
-            android:title="@string/gps_update_interval"
-            android:entries="@array/gps_update_interval_values"
-            android:entryValues="@array/gps_update_interval_values"
-            android:defaultValue="300ms" />
+    <ListPreference
+        android:defaultValue="300ms"
+        android:entries="@array/gps_update_interval_values"
+        android:entryValues="@array/gps_update_interval_values"
+        android:key="gpsUpdateInterval"
+        android:title="@string/gps_update_interval" />
+
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="hudMirror"
+        android:title="@string/hud_mirror" />
 </PreferenceScreen>

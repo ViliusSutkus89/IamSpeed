@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_IamSpeedFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_IamSpeedFragment_to_hudFragment"
+            app:destination="@id/hudFragment" />
     </fragment>
 
     <fragment
@@ -31,5 +34,9 @@
         android:name="com.viliussutkus89.iamspeed.ui.SettingsFragment"
         android:label="@string/menu_settings"
         />
+    <fragment
+        android:id="@+id/hudFragment"
+        android:name="com.viliussutkus89.iamspeed.ui.HudFragment"
+        tools:layout="@layout/fragment_hud" />
 
 </navigation>

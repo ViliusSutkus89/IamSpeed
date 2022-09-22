@@ -108,4 +108,38 @@ class RotateScreen {
             onView(withId(R.id.button_enable_location)).check(matches(not(isDisplayed())))
         }
     }
+
+    @Test
+    fun rotateHudFragment() {
+        onView(withId(R.id.speed)).check(matches(isDisplayed()))
+
+        onView(
+            Matchers.anyOf(
+                withId(R.id.hud),
+                ViewMatchers.withText(R.string.menu_hud),
+            )
+        ).withFailureHandler { _, viewMatcher ->
+            Espresso.openActionBarOverflowOrOptionsMenu(instrumentation.targetContext)
+            onView(viewMatcher).perform(ViewActions.click())
+        }.perform(ViewActions.click())
+
+        for (i in 0..32) {
+            scenarioRule.scenario.onActivity { activity ->
+                val idlingResource = (activity.application as IamSpeedApplication).configurationChangedIdlingResource!!
+                idlingResource.increment()
+                val idlingRegistry = IdlingRegistry.getInstance()
+                idlingRegistry.unregister(idlingResource)
+                activity.requestedOrientation = when (i % 4) {
+                    0 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    1 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    2 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    else -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                }
+                idlingRegistry.register(idlingResource)
+            }
+
+            onView(withId(R.id.speed)).check(matches(isDisplayed()))
+            Assert.assertTrue(SpeedListenerService.started.value!!)
+        }
+    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.HudFragment"
+
+    android:keepScreenOn="true"
+    android:id="@+id/speed"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+
+    tools:text="299"
+    app:autoSizeTextType="uniform"
+    app:autoSizeMaxTextSize="600dp"
+    android:lines="1"
+    app:fontFamily="@font/lets_go_digital_regular"
+    />
