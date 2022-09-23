@@ -2,8 +2,6 @@
 
 Android speedometer app with Heads-Up Display mode
 
-[![test](https://github.com/ViliusSutkus89/IamSpeed/actions/workflows/test.yml/badge.svg)](https://github.com/ViliusSutkus89/IamSpeed/actions/workflows/test.yml)
-
 [![I am Speed is available at Amazon Appstore!](images/amazon-appstore-badge-english-white_60.png)](https://www.amazon.com/gp/product/B0BD6DJZLG)
 
 ![Actual use](images/hero.jpg)
