@@ -30,6 +30,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.viliussutkus89.iamspeed.MergerLiveData
+import com.viliussutkus89.iamspeed.service.SatelliteCount
 import com.viliussutkus89.iamspeed.service.SpeedEntry
 import com.viliussutkus89.iamspeed.service.SpeedListenerService
 
@@ -41,7 +42,7 @@ class IamSpeedViewModel: ViewModel() {
 
     val started: LiveData<Boolean> get() = SpeedListenerService.started
     val speed: LiveData<SpeedEntry?> get() = SpeedListenerService.speed
-    val satelliteCount: LiveData<Int> get() = SpeedListenerService.satelliteCount
+    val satelliteCount: LiveData<SatelliteCount?> get() = SpeedListenerService.satelliteCount
 
     private val _showLocationPermissionRequest = MutableLiveData(true)
     val showLocationPermissionRequest: LiveData<Boolean> get() = _showLocationPermissionRequest
@@ -114,5 +115,13 @@ class IamSpeedViewModel: ViewModel() {
 
     fun stop(context: Context) {
         SpeedListenerService.stopSpeedListener(context)
+    }
+
+    fun stopCountingSatellites(context: Context) {
+        SpeedListenerService.stopCountingSatellites(context)
+    }
+
+    fun restartCountingSatellites(context: Context) {
+        SpeedListenerService.restartCountingSatellites(context)
     }
 }

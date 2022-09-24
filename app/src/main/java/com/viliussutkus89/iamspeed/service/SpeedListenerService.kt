@@ -57,7 +57,7 @@ class SpeedListenerService: LifecycleService() {
         val started: LiveData<Boolean> get() = started_
 
         val speed: LiveData<SpeedEntry?> get() = SpeedListener.speed
-        val satelliteCount: LiveData<Int> get() = SatelliteCountListener.satelliteCount
+        val satelliteCount: LiveData<SatelliteCount?> get() = SatelliteCountListener.satelliteCount
 
         private const val START_INTENT_ACTION = "START"
         @MainThread
@@ -73,6 +73,8 @@ class SpeedListenerService: LifecycleService() {
             }
         }
 
+        @VisibleForTesting
+        internal const val STOP_BROADCAST_ACTION = "com.viliussutkus89.iamspeed.STOP_BROADCAST"
         private const val STOP_INTENT_ACTION = "STOP"
         @MainThread
         fun stopSpeedListener(context: Context) {
@@ -83,8 +85,23 @@ class SpeedListenerService: LifecycleService() {
             context.startService(intent)
         }
 
-        @VisibleForTesting
-        internal const val STOP_BROADCAST_ACTION = "com.viliussutkus89.iamspeed.STOP_BROADCAST"
+        private const val STOP_COUNTING_SATELLITES = "STOP_COUNTING_SATELLITES"
+        @MainThread
+        fun stopCountingSatellites(context: Context) {
+            val intent = Intent(context, SpeedListenerService::class.java).also {
+                it.action = STOP_COUNTING_SATELLITES
+            }
+            context.startService(intent)
+        }
+
+        private const val RESTART_COUNTING_SATELLITES = "RESTART_COUNTING_SATELLITES"
+        @MainThread
+        fun restartCountingSatellites(context: Context) {
+            val intent = Intent(context, SpeedListenerService::class.java).also {
+                it.action = RESTART_COUNTING_SATELLITES
+            }
+            context.startService(intent)
+        }
 
         private val startingIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.starting")
         private val stoppingIdlingResource = CountingIdlingResourceFactory.create("${this::class.java.declaringClass}.stopping")
@@ -177,6 +194,8 @@ class SpeedListenerService: LifecycleService() {
             when (it.action) {
                 START_INTENT_ACTION -> start()
                 STOP_INTENT_ACTION -> stop()
+                STOP_COUNTING_SATELLITES -> satelliteCountListener.stop()
+                RESTART_COUNTING_SATELLITES -> satelliteCountListener.start()
             }
         }
         return super.onStartCommand(intent, flags, startId)

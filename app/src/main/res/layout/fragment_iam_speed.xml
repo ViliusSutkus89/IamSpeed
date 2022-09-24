@@ -58,8 +58,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/satellite_count(viewModel.satelliteCount)}"
-            android:visibility="@{viewModel.started ? View.VISIBLE : View.GONE }" />
+            android:text="@{@string/satellite_count(viewModel.satelliteCount.active, viewModel.satelliteCount.total)}"
+            android:visibility="@{viewModel.satelliteCount != null ? View.VISIBLE : View.GONE }" />
 
         <TextView
             android:id="@+id/accuracy"

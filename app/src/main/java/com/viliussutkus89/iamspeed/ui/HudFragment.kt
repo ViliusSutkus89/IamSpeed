@@ -50,6 +50,8 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.stopCountingSatellites(requireContext())
+
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
         val window = requireActivity().window
         if (Build.VERSION.SDK_INT >= 30) {
@@ -77,6 +79,7 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.restartCountingSatellites(requireContext())
 
         val window = requireActivity().window
         if (Build.VERSION.SDK_INT >= 30) {

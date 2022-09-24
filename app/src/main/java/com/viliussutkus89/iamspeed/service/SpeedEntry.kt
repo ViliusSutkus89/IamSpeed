@@ -24,3 +24,8 @@ data class SpeedEntry(
     val speedStr: String,
     val accuracy: String?
 )
+
+data class SatelliteCount(
+    val active: Int,
+    val total: Int
+)
