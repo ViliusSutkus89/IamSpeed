@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import android.view.animation.AlphaAnimation
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.core.view.forEach
@@ -52,22 +53,30 @@ class IamSpeedFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().let { context ->
+        requireContext().let { context ->
             viewModel.checkPermissions(context)
             viewModel.checkLocationEnabled(context)
             viewModel.serviceCanBeStartedOnStartup.observe(viewLifecycleOwner) { serviceCanBeStartedOnStartup ->
                 if (serviceCanBeStartedOnStartup && viewModel.started.value != true) {
                     viewModel.start(context)
                 }
-
                 (activity as IamSpeedActivity?)?.serviceCanBeStartedOnStartupIdlingResource?.let {
                     if (!it.isIdleNow) {
                         it.decrement()
                     }
                 }
             }
-            context.addMenuProvider(menuProvider, viewLifecycleOwner)
             context.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
+        }
+        requireActivity().let { activity ->
+            activity.addMenuProvider(menuProvider, viewLifecycleOwner)
+            activity.onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                if (viewModel.started.value == true) {
+                    viewModel.stop(activity)
+                }
+                isEnabled = false
+                activity.onBackPressed()
+            }
         }
         _binding = FragmentIamSpeedBinding.inflate(inflater, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
