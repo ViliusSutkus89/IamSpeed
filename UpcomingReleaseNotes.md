@@ -1,1 +1,0 @@
-Stop speed listener if the back button is pressed in main screen
