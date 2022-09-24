@@ -34,8 +34,7 @@ import com.viliussutkus89.iamspeed.rule.ScreenshotFailedTestRule
 import com.viliussutkus89.iamspeed.service.SpeedListenerService
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
 import com.viliussutkus89.iamspeed.utils.LocationControl
-import org.hamcrest.Matchers.anyOf
-import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers
 import org.junit.*
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
@@ -71,21 +70,31 @@ class HudModeWindow {
         .around(ScreenshotFailedTestRule(scenarioRule))
         .around(IdlingResourceRule(scenarioRule))
 
-    private val actionBarMatcher = anyOf(
-        withText(androidx.appcompat.R.string.abc_action_bar_up_description),
-        withContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description),
-        withText(androidx.appcompat.R.string.abc_action_menu_overflow_description),
-        withContentDescription(androidx.appcompat.R.string.abc_action_menu_overflow_description),
-        withId(R.id.hud),
-        withText(R.string.menu_hud),
-    )
+    private fun checkIfActionBar(displayed: Boolean) {
+        val actionBar = Matchers.anyOf(
+            withId(R.id.hud),
+            withText(R.string.menu_hud),
+
+            withText(androidx.appcompat.R.string.abc_action_menu_overflow_description),
+            withContentDescription(androidx.appcompat.R.string.abc_action_menu_overflow_description),
+
+            withText(androidx.appcompat.R.string.abc_action_bar_up_description),
+            withContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description),
+        )
+
+        if (displayed) {
+            onView(Matchers.allOf(isDisplayed(), actionBar))
+        } else {
+            onView(actionBar).check(matches(Matchers.not(isDisplayed())))
+        }
+    }
 
     @Before
     fun enterHudMode() {
-        onView(actionBarMatcher).check(matches(isDisplayed()))
+        checkIfActionBar(true)
 
         onView(
-            anyOf(
+            Matchers.anyOf(
                 withId(R.id.hud),
                 withText(R.string.menu_hud),
             )
@@ -100,13 +109,12 @@ class HudModeWindow {
 
     @Test
     fun actionBarDisappears() {
-        onView(actionBarMatcher).check(matches(not(isDisplayed())))
+        checkIfActionBar(false)
     }
 
     @Test
     fun actionBarRestored() {
         Espresso.pressBack()
-
-        onView(actionBarMatcher).check(matches(isDisplayed()))
+        checkIfActionBar(true)
     }
 }

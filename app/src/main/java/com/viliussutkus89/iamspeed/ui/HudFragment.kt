@@ -33,7 +33,7 @@ import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryTotalTimeout
 import com.viliussutkus89.iamspeed.R
 
 
-class HudFragment: Fragment(R.layout.fragment_hud) {
+class HudFragment : Fragment(R.layout.fragment_hud) {
     private val isRunningTest: Boolean = try {
         Class.forName("androidx.test.espresso.Espresso")
         true
@@ -52,27 +52,25 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
     ): View? {
         viewModel.stopCountingSatellites(requireContext())
 
-        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-        val window = requireActivity().window
-        if (Build.VERSION.SDK_INT >= 30) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else if (Build.VERSION.SDK_INT in 16..29) {
-            @Suppress("DEPRECATION")
-            systemUiVisibilityBeforeTouching = window.decorView.systemUiVisibility
+        (requireActivity() as AppCompatActivity).let { activity ->
+            activity.supportActionBar?.hide()
+            if (Build.VERSION.SDK_INT >= 30) {
+                activity.window.insetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            } else {
+                @Suppress("DEPRECATION")
+                systemUiVisibilityBeforeTouching = activity.window.decorView.systemUiVisibility
 
-            @Suppress("DEPRECATION")
-            @Suppress("InlinedApi") // RangeCheck not picked up by the linter
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+                @Suppress("DEPRECATION")
+                activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
-            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-        } else {
-            @Suppress("DEPRECATION")
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
-            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+                if (Build.VERSION.SDK_INT >= 16) {
+                    @Suppress("DEPRECATION")
+                    activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+                } else {
+                    @Suppress("DEPRECATION")
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                }
+            }
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -81,17 +79,25 @@ class HudFragment: Fragment(R.layout.fragment_hud) {
         super.onDestroyView()
         viewModel.restartCountingSatellites(requireContext())
 
-        val window = requireActivity().window
-        if (Build.VERSION.SDK_INT >= 30) {
-            window.insetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else if (Build.VERSION.SDK_INT in 16..29) {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
-        } else {
-            @Suppress("DEPRECATION")
-            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        (requireActivity() as AppCompatActivity).let { activity ->
+            activity.supportActionBar?.show()
+            activity.window.let { window ->
+                if (Build.VERSION.SDK_INT >= 30) {
+                    // empty run at the end because IDE won't shut up about "SDK_INT < 16" check below
+                    window.insetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars()) ?: run {}
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
+                    @Suppress("DEPRECATION")
+                    window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
+
+                    if (Build.VERSION.SDK_INT < 16) {
+                        @Suppress("DEPRECATION")
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    }
+                }
+            }
         }
-        (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
