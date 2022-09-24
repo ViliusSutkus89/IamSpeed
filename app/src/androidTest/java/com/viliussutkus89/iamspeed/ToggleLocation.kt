@@ -97,16 +97,16 @@ class ToggleLocation {
                 it.locationSettingsChangedIdlingResource!!.increment()
                 enableGps()
             }
+
             // @TODO: might be possible to use uiAutomator to wait until
             // LocationManager activity is displayed on screen proper
             // Wouldn't need to use failure handler below
             uiDevice?.pressBack()
 
-            val speedView = onView(withId(R.id.speed))
-            speedView.withFailureHandler { error, _ ->
+            onView(withId(R.id.speed)).withFailureHandler { error, _ ->
                     uiDevice?.let {
                         it.pressBack()
-                        speedView.check(matches(isDisplayed()))
+                        onView(withId(R.id.speed)).check(matches(isDisplayed()))
                     } ?: run { throw error }
                 }
                 .check(matches(isDisplayed()))
@@ -152,17 +152,17 @@ class ToggleLocation {
         // Back button can't be pressed while idling resource is not idle.
         // The purpose of this idling resource is to detect
         // when things after back button press are completed.
-        IdlingRegistry.getInstance().let { idlingRegistry ->
-            scenarioRule.scenario.onActivity {
-                it.serviceCanBeStartedOnStartupIdlingResource!!.let { ir ->
-                    ir.increment()
-                    idlingRegistry.unregister(ir)
-                }
+        scenarioRule.scenario.onActivity {
+            it.serviceCanBeStartedOnStartupIdlingResource!!.let { ir ->
+                ir.increment()
+                IdlingRegistry.getInstance().unregister(ir)
             }
-            Espresso.pressBack()
-            scenarioRule.scenario.onActivity {
-                idlingRegistry.register(it.serviceCanBeStartedOnStartupIdlingResource!!)
-            }
+        }
+
+        Espresso.pressBack()
+
+        scenarioRule.scenario.onActivity {
+            IdlingRegistry.getInstance().register(it.serviceCanBeStartedOnStartupIdlingResource!!)
         }
     }
 
@@ -195,6 +195,13 @@ class ToggleLocation {
         Assert.assertFalse(SpeedListenerService.started.value!!)
 
         incrementIdlingResource_unregister_pressBack_registerItAgain()
+
+        // Add single a single retry when returning from other fragment
+        // Could be handled by idling resource
+        onView(withId(R.id.speed)).withFailureHandler { _, _ ->
+                onView(withId(R.id.speed)).check(matches(not(isDisplayed())))
+            }
+            .check(matches(not(isDisplayed())))
 
         onView(withId(R.id.speed))
             .check(matches(not(isDisplayed())))
