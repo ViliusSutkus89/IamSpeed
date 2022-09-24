@@ -1,5 +1,5 @@
 /*
- * .kt
+ * IdlingResourceRule.kt
  *
  * Copyright (C) 2022 https://www.ViliusSutkus89.com/i-am-speed/
  *

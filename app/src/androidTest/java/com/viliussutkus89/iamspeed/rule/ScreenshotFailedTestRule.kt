@@ -1,5 +1,5 @@
 /*
- * .kt
+ * ScreenshotFailedTestRule.kt
  *
  * Copyright (C) 2022 https://www.ViliusSutkus89.com/i-am-speed/
  *
@@ -25,6 +25,7 @@ import android.util.Log
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.screenshot.BasicScreenCaptureProcessor
+import androidx.test.runner.screenshot.ScreenCapture
 import androidx.test.runner.screenshot.Screenshot
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -47,41 +48,36 @@ class ScreenshotFailedTestRule<T>(private val scenario: ActivityScenarioRule<T>)
                 ctx.cacheDir,
                 ctx.externalCacheDir
             ).map { File(it, "TestScreenshots") }
-            .forEach {
-                it.mkdirs()
-                if (it.isDirectory && it.canWrite()) {
-                    Log.v(TAG, "setting mDefaultScreenshotPath to " + it.path)
-                    return it
+                .forEach {
+                    it.mkdirs()
+                    if (it.isDirectory && it.canWrite()) {
+                        Log.v(TAG, "setting mDefaultScreenshotPath to " + it.path)
+                        return it
+                    }
                 }
-            }
             return null
         }
     }
 
-    // Activity required for API level <18
-    private lateinit var activity: Activity
-
-    override fun starting(description: Description?) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            scenario.scenario.onActivity {
-                activity = it
-            }
-        }
-    }
-
-    override fun failed(e: Throwable, description: Description) {
-        val capture = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            Screenshot.capture()
-        } else {
-            Screenshot.capture(activity)
-        }.apply {
+    private fun makeScreenshot(screenCapture: ScreenCapture, description: Description) {
+        screenCapture.apply {
             name = description.testClass.simpleName + "-" + description.methodName
             format = Bitmap.CompressFormat.PNG
         }
         try {
-            processor.process(capture)
+            processor.process(screenCapture)
         } catch (err: IOException) {
             err.printStackTrace()
+        }
+    }
+
+    override fun failed(e: Throwable, description: Description) {
+        if (Build.VERSION.SDK_INT >= 18) {
+            makeScreenshot(Screenshot.capture(), description)
+        } else {
+            scenario.scenario.onActivity { activity ->
+                makeScreenshot(Screenshot.capture(activity), description)
+            }
         }
     }
 }
