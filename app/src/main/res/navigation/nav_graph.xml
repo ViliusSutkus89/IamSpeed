@@ -25,18 +25,17 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.viliussutkus89.iamspeed.ui.AboutFragment"
-        android:label="@string/menu_about"
+        android:label="@string/about_title"
         tools:layout="@layout/fragment_about">
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.viliussutkus89.iamspeed.ui.SettingsFragment"
-        android:label="@string/menu_settings"
-        />
+        android:label="@string/menu_settings" />
+
     <fragment
         android:id="@+id/hudFragment"
         android:name="com.viliussutkus89.iamspeed.ui.HudFragment"
         tools:layout="@layout/fragment_hud" />
-
 </navigation>
