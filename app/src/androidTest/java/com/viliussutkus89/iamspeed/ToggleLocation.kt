@@ -97,10 +97,20 @@ class ToggleLocation {
                 it.locationSettingsChangedIdlingResource!!.increment()
                 enableGps()
             }
+            // @TODO: might be possible to use uiAutomator to wait until
+            // LocationManager activity is displayed on screen proper
+            // Wouldn't need to use failure handler below
             uiDevice?.pressBack()
 
-            onView(withId(R.id.speed))
+            val speedView = onView(withId(R.id.speed))
+            speedView.withFailureHandler { error, _ ->
+                    uiDevice?.let {
+                        it.pressBack()
+                        speedView.check(matches(isDisplayed()))
+                    } ?: run { throw error }
+                }
                 .check(matches(isDisplayed()))
+
             Assert.assertTrue(SpeedListenerService.started.value!!)
             onView(withId(R.id.button_enable_location))
                 .check(matches(not(isDisplayed())))
