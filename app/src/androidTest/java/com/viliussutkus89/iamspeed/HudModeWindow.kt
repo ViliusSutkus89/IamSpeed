@@ -22,6 +22,7 @@ import android.Manifest
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.activityScenarioRule
@@ -85,7 +86,10 @@ class HudModeWindow {
         if (displayed) {
             onView(Matchers.allOf(isDisplayed(), actionBar))
         } else {
-            onView(actionBar).check(matches(Matchers.not(isDisplayed())))
+            onView(Matchers.allOf(actionBar, Matchers.not(isDisplayed())))
+                .withFailureHandler { _, _ ->
+                    onView(actionBar).check(doesNotExist())
+                }
         }
     }
 
