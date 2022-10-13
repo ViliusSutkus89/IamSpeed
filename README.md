@@ -2,7 +2,7 @@
 
 Android speedometer app with Heads-Up Display mode
 
-[![Get I am Speed on Google Play!](/images/en_badge_web_generic_cropped_60.png)](https://play.google.com/store/apps/details?id=com.viliussutkus89.iamspeed&utm_source=HomePage)
+[![Get I am Speed on Google Play!](/images/en_badge_web_generic_cropped_60.png)](https://play.google.com/store/apps/details?id=com.viliussutkus89.iamspeed&utm_source=GitHub)
 
 # Screenshots
 
