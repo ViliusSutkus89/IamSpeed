@@ -2,15 +2,7 @@
 
 Android speedometer app with Heads-Up Display mode
 
-# Download
-
-App is currently being reviewed by Play Store and Amazon Appstore.
-
-APK for manual installation is available at [GitHub releases](https://github.com/ViliusSutkus89/IamSpeed/releases).
-
-Outdated version (Speedster) can be downloaded from Amazon Appstore:
-
-[![Speedster is available at Amazon Appstore!](images/amazon-appstore-badge-english-white_60.png)](https://www.amazon.com/gp/product/B0BD6DJZLG)
+[![Get I am Speed on Google Play!](/images/en_badge_web_generic_cropped_60.png)](https://play.google.com/store/apps/details?id=com.viliussutkus89.iamspeed&utm_source=HomePage)
 
 # Screenshots
 
