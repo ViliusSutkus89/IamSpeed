@@ -78,7 +78,7 @@ class IamSpeedFragment: Fragment() {
                     viewModel.stop(activity)
                 }
                 isEnabled = false
-                activity.onBackPressed()
+                activity.finish()
             }
         }
         _binding = FragmentIamSpeedBinding.inflate(inflater, container, false).also {
@@ -103,8 +103,10 @@ class IamSpeedFragment: Fragment() {
     private val systemAlertWindowPermissionRequest = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(requireContext())) {
-            SpeedListenerService.enterPipMode(requireContext())
+        val activity = requireActivity()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(activity)) {
+            SpeedListenerService.enterPipMode(activity)
+            activity.finish()
         } else {
             Snackbar.make(binding.root, R.string.alert_window_permission_rationale, Snackbar.LENGTH_LONG).show()
         }
