@@ -10,6 +10,8 @@ Android speedometer app with Heads-Up Display and Picture-in-Picture modes
 
 ![Screenshot](images/screenshot.png)
 
+![Picture-in-Picture moed](images/pip.png)
+
 # Requirements
 
 I am Speed has a reasonable list of requirements for the end user:
