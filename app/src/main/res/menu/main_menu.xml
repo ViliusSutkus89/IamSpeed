@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/pip"
+        android:icon="@drawable/ic_baseline_picture_in_picture_24"
+        android:title="@string/menu_pip"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/hud"
         android:icon="@drawable/ic_outline_approval_24"
         android:title="@string/menu_hud"

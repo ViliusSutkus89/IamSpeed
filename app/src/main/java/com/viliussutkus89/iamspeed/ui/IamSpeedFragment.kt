@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -41,6 +42,7 @@ import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryStartFadingAf
 import com.viliussutkus89.iamspeed.AppSettings.Companion.speedEntryTotalTimeout
 import com.viliussutkus89.iamspeed.R
 import com.viliussutkus89.iamspeed.databinding.FragmentIamSpeedBinding
+import com.viliussutkus89.iamspeed.service.SpeedListenerService
 
 
 class IamSpeedFragment: Fragment() {
@@ -67,6 +69,7 @@ class IamSpeedFragment: Fragment() {
                 }
             }
             context.registerReceiver(locationManagerBroadcastReceiver, locationManagerBroadcastReceiver.intentFilter)
+            SpeedListenerService.closePipMode(context)
         }
         requireActivity().let { activity ->
             activity.addMenuProvider(menuProvider, viewLifecycleOwner)
@@ -95,6 +98,16 @@ class IamSpeedFragment: Fragment() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
         viewModel.checkPermissions(requireContext())
+    }
+
+    private val systemAlertWindowPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(requireContext())) {
+            SpeedListenerService.enterPipMode(requireContext())
+        } else {
+            Snackbar.make(binding.root, R.string.alert_window_permission_rationale, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private val isRunningTest: Boolean = try {
@@ -186,11 +199,31 @@ class IamSpeedFragment: Fragment() {
             viewModel.started.observe(viewLifecycleOwner) {
                 menu.findItem(R.id.stop)?.isVisible = it
                 menu.findItem(R.id.hud)?.isVisible = it
+                menu.findItem(R.id.pip)?.isVisible = it
             }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
+                R.id.pip -> {
+                    val activity = requireActivity()
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(activity)) {
+                        SpeedListenerService.enterPipMode(activity)
+                        activity.finish()
+                    } else {
+                        // Beginning with Android 11,
+                        // ACTION_MANAGE_OVERLAY_PERMISSION intents always bring the user to the top-level Settings screen,
+                        // where the user can grant or revoke the SYSTEM_ALERT_WINDOW permissions for apps.
+                        // Any package: data in the intent is ignored.
+                        systemAlertWindowPermissionRequest.launch(
+                            Intent(
+                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + activity.packageName)
+                            )
+                        )
+                    }
+                    true
+                }
                 R.id.hud -> {
                     findNavController().navigate(IamSpeedFragmentDirections.actionIamSpeedFragmentToHudFragment())
                     true

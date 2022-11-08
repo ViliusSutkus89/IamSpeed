@@ -1,6 +1,6 @@
 # [I am Speed](https://www.viliusSutkus89.com/i-am-speed)
 
-Android speedometer app with Heads-Up Display mode
+Android speedometer app with Heads-Up Display and Picture-in-Picture modes
 
 [![Get I am Speed on Google Play!](/images/en_badge_web_generic_cropped_60.png)](https://play.google.com/store/apps/details?id=com.viliussutkus89.iamspeed&utm_source=GitHub)
 
@@ -20,12 +20,21 @@ I am Speed has a reasonable list of requirements for the end user:
 ### Permissions required
 
 List declared in [AndroidManifest.xml](/app/src/main/AndroidManifest.xml):
-* android.permission.ACCESS_COARSE_LOCATION
 * android.permission.ACCESS_FINE_LOCATION
+* android.permission.ACCESS_COARSE_LOCATION
 * android.permission.FOREGROUND_SERVICE
+* android.permission.POST_NOTIFICATIONS
+* android.permission.SYSTEM_ALERT_WINDOW
 
 Although Android Operating System grants android.permission.INTERNET permission automatically when declared,
 this application does not ask for such permission.
+
+ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION are needed to obtain speed data from GPS receiver.
+
+The speedometer logic part of I am Speed app is implemented in a foreground service to allow receiving speed updates while the app is not in foreground.
+Foreground service requires FOREGROUND_SERVICE permission and POST_NOTIFICATIONS to show foreground notification.
+
+Picture-in-Picture mode requires SYSTEM_ALERT_WINDOW permission.
 
 # Privacy policy
 

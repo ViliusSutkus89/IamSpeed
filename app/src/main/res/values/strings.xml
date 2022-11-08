@@ -43,5 +43,7 @@
     <string name="satellite_count">Satellites: %d/%d</string>
     <string name="accuracy">Accuracy: %s</string>
     <string name="menu_hud">Heads-Up Display</string>
+    <string name="menu_pip">Enter Picture-in-Picture mode</string>
     <string name="hud_mirror">Mirror text vertically in Heads-Up Display</string>
+    <string name="alert_window_permission_rationale">Permission to draw over other apps is required to enter Picture-in-Picture mode.</string>
 </resources>

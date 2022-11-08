@@ -42,6 +42,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.espresso.IdlingResource
 import com.viliussutkus89.iamspeed.R
 import com.viliussutkus89.iamspeed.ui.IamSpeedActivity
+import com.viliussutkus89.iamspeed.ui.Pip
 import com.viliussutkus89.iamspeed.util.CountingIdlingResourceFactory
 import java.util.concurrent.Executors
 
@@ -85,6 +86,15 @@ class SpeedListenerService: LifecycleService() {
             context.startService(intent)
         }
 
+        private const val MOCK_INTENT_ACTION = "MOCK"
+        @MainThread
+        fun mockSpeed(context: Context) {
+            val intent = Intent(context, SpeedListenerService::class.java).also {
+                it.action = MOCK_INTENT_ACTION
+            }
+            context.startService(intent)
+        }
+
         private const val STOP_COUNTING_SATELLITES = "STOP_COUNTING_SATELLITES"
         @MainThread
         fun stopCountingSatellites(context: Context) {
@@ -99,6 +109,24 @@ class SpeedListenerService: LifecycleService() {
         fun restartCountingSatellites(context: Context) {
             val intent = Intent(context, SpeedListenerService::class.java).also {
                 it.action = RESTART_COUNTING_SATELLITES
+            }
+            context.startService(intent)
+        }
+
+        private const val PIP_INTENT_ACTION = "PIP"
+        @MainThread
+        fun enterPipMode(context: Context) {
+            val intent = Intent(context, SpeedListenerService::class.java).also {
+                it.action = PIP_INTENT_ACTION
+            }
+            context.startService(intent)
+        }
+
+        private const val PIP_CLOSE_INTENT_ACTION = "PIP_CLOSE"
+        @MainThread
+        fun closePipMode(context: Context) {
+            val intent = Intent(context, SpeedListenerService::class.java).also {
+                it.action = PIP_CLOSE_INTENT_ACTION
             }
             context.startService(intent)
         }
@@ -189,6 +217,8 @@ class SpeedListenerService: LifecycleService() {
     private val speedListener by lazy { SpeedListener(locationManager, executor, sharedPreferences) }
     private val satelliteCountListener by lazy { SatelliteCountListener(locationManager, executor) }
 
+    private var pip: Pip? = null
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
@@ -196,6 +226,14 @@ class SpeedListenerService: LifecycleService() {
                 STOP_INTENT_ACTION -> stop()
                 STOP_COUNTING_SATELLITES -> satelliteCountListener.stop()
                 RESTART_COUNTING_SATELLITES -> satelliteCountListener.start()
+                PIP_INTENT_ACTION -> {
+                    pip = Pip(this, this, speed)
+                }
+
+                PIP_CLOSE_INTENT_ACTION -> {
+                    pip?.stop()
+                    pip = null
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId)
