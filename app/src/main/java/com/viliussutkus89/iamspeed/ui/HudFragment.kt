@@ -88,8 +88,6 @@ class HudFragment : Fragment(R.layout.fragment_hud) {
                 } else {
                     @Suppress("DEPRECATION")
                     window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
-                    @Suppress("DEPRECATION")
-                    window.decorView.systemUiVisibility = systemUiVisibilityBeforeTouching
 
                     if (Build.VERSION.SDK_INT < 16) {
                         @Suppress("DEPRECATION")
