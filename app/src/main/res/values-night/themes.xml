@@ -16,10 +16,19 @@
         <item name="android:background">@color/black</item>
 
         <item name="materialButtonStyle">@style/buttonStyle</item>
+
+        <item name="snackbarStyle">@style/snackbarStyleNight</item>
+        <item name="snackbarTextViewStyle">@style/snackbarTextViewStyleNight</item>
     </style>
 
     <style name="buttonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@color/purple_200</item>
     </style>
 
+    <style name="snackbarStyleNight" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/white</item>
+    </style>
+    <style name="snackbarTextViewStyleNight" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="backgroundTint">@color/white</item>
+    </style>
 </resources>
