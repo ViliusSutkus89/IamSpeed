@@ -87,7 +87,7 @@ jobs:
         run: tar -cf app-build.tar app/build
 
       - name: artifact app/build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-build.tar
           path: app-build.tar
