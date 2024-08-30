@@ -1,7 +1,7 @@
 /*
  * Pip.kt
  *
- * Copyright (C) 2022 https://www.ViliusSutkus89.com/i-am-speed/
+ * Copyright (C) 2022, 2024 https://www.ViliusSutkus89.com/i-am-speed/
  *
  * I am Speed is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3,
@@ -48,7 +48,7 @@ class Pip(
         LifecycleRegistry(this)
     }
 
-    override fun getLifecycle(): Lifecycle = lifecycleRegistry
+    override val lifecycle: Lifecycle get() = lifecycleRegistry
 
     init {
         parentLifecycleOwner.lifecycle.addObserver(object: DefaultLifecycleObserver {
