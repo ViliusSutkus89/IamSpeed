@@ -46,6 +46,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
+@Suppress
 class ToggleLocation {
     companion object {
         private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
