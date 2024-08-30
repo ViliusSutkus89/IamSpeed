@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.viliussutkus89.iamspeed"
         minSdk 14
-        targetSdk 33
+        targetSdk 34
 
         versionCode 281
         versionName "1.2.3"
