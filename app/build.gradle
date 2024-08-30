@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.viliussutkus89.iamspeed'
-    compileSdk 33
+    compileSdk 35
     defaultConfig {
         applicationId "com.viliussutkus89.iamspeed"
         minSdk 14
