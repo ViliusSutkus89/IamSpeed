@@ -126,15 +126,10 @@ jobs:
           - {'api_level': 22, 'api_type_target': 'default', 'arch': 'x86'}
           - {'api_level': 21, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 21, 'api_type_target': 'default', 'arch': 'x86'}
-          - {'api_level': 19, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 19, 'api_type_target': 'default', 'arch': 'x86'}
-          - {'api_level': 18, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 18, 'api_type_target': 'default', 'arch': 'x86'}
-          - {'api_level': 17, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 17, 'api_type_target': 'default', 'arch': 'x86'}
-          - {'api_level': 16, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 16, 'api_type_target': 'default', 'arch': 'x86'}
-          - {'api_level': 15, 'api_type_target': 'default', 'arch': 'x86_64'}
           - {'api_level': 15, 'api_type_target': 'default', 'arch': 'x86'}
     steps:
       - uses: actions/checkout@v4
