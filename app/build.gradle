@@ -105,7 +105,7 @@ dependencies {
     androidTestUtil 'androidx.test:orchestrator:1.4.1'
     androidTestImplementation "androidx.test:rules:1.4.0"
 
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.6.1"
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.4.0"
     implementation "androidx.test.espresso:espresso-idling-resource:3.4.0"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:3.4.0"
