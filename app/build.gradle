@@ -77,7 +77,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //noinspection GradleDependency androidx.appcompat:appcompat:1.7.0 requires minSdk 21
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
 
     //noinspection GradleDependency com.google.android.material:material:1.12.0 requires minSdk 19
     implementation 'com.google.android.material:material:1.11.0'
