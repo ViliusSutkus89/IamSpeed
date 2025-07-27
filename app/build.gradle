@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace 'com.viliussutkus89.iamspeed'
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId "com.viliussutkus89.iamspeed"
         minSdk 14
-        targetSdk 34
+        targetSdk 35
 
         versionCode 291
         versionName "1.2.4"
@@ -48,11 +48,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     lint.abortOnError = false
