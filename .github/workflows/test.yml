@@ -46,7 +46,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Generate ephemeral keystore
         run: keytool -genkey -noprompt -alias alias1 -dname "CN=$applicationId.ephemeral, OU=EphemeralSignatures, O=ViliusSutkus89.com, L=Kaunas, S=Kaunas, C=LT" -keystore app/$applicationId.ephemeral.jks -keypass 123456 -keyalg RSA -keysize 4096 -validity 1 -storepass 123456
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - run: ./gradlew assembleDebug -Ptest_build
 
@@ -136,7 +136,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Download app/build artifact
         uses: actions/download-artifact@v4
