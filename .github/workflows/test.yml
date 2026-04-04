@@ -42,8 +42,8 @@ jobs:
   releaseBuild:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
@@ -58,14 +58,14 @@ jobs:
           SIGNING_ALIAS: alias1
 
       - name: artifact release builds
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: APKs
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
       - name: Artifact lint report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           path: app/build/reports/lint-results-release.html
           name: lintResults
@@ -74,8 +74,8 @@ jobs:
   debugBuild:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
@@ -87,7 +87,7 @@ jobs:
         run: tar -cf app-build.tar app/build
 
       - name: artifact app/build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-build.tar
           path: app-build.tar
@@ -132,20 +132,20 @@ jobs:
           - {'api_level': 16, 'api_type_target': 'default', 'arch': 'x86'}
           - {'api_level': 15, 'api_type_target': 'default', 'arch': 'x86'}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
 
       - name: Download app/build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: app-build.tar
       - run: tar -xf app-build.tar
 
       - name: setup python 3.12
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.12
       - run: pip3 install adbPullAs
@@ -188,7 +188,7 @@ jobs:
 
             test ! -f sorry_but_tests_are_failing
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: testResults-${{ matrix.api_level }}-${{ matrix.arch }}-${{ matrix.api_type_target }}
