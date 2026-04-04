@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.IamSpeedActivity"
             android:exported="true"
+            android:enableOnBackInvokedCallback="true"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
